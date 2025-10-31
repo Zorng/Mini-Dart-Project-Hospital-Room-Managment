@@ -4,6 +4,11 @@ enum GenderPolicy {
   Mixed,
 }
 
+enum Gender{
+  Male,
+  Female
+}
+
 enum Level {
   lV1, 
   lV2,
