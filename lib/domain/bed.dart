@@ -4,7 +4,7 @@ class Patient{
   final String id;
   final String name;
   final String phone;
-  final GenderPolicy gender;
+  final Gender gender;
 
   Patient(this.id, this.name, this.phone, this.gender);
 }
