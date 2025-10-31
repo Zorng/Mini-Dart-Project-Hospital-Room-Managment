@@ -5,8 +5,8 @@ void main() {
   print('--- Testing Bed Methods ---');
   // AI GENERATED
   // Setup Data
-  var patientA = Patient('P101', 'Rafat','012345678', GenderPolicy.FemaleOnly);
-  var patientB = Patient('P102', 'Sok', '012345678', GenderPolicy.MaleOnly);
+  var patientA = Patient('P101', 'Rafat','012345678', Gender.Female);
+  var patientB = Patient('P102', 'Sok', '012345678', Gender.Male);
   var stayID = 'STAY-001';
 
   // Beds for Testing
