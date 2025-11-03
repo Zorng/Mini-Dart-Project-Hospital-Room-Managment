@@ -21,6 +21,10 @@ class Bed{
 
   Bed(this.bedId, {this.status = BedAvailability.Available});
 
+  bool get isAvailable{
+    return status == BedAvailability.Available;
+  }
+
   // mark the bed as Occupied and assigned it to patient
   void assignPatient(Patient patient, String stayId){
     if(status != BedAvailability.Available){
