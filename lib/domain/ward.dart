@@ -23,7 +23,7 @@ class Ward extends Room {
 
     // Check gender policy
     if (genderPolicy == GenderPolicy.Mixed) {
-      return true; // No policy restriction
+      return true;
     }
     
     // Check male only
