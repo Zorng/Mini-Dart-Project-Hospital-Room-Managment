@@ -28,9 +28,6 @@ class AppConsole {
     print('\n==============================================');
   }
 
-  void pagination(){
-    
-  }
 
   //AI generated
   void clearConsole() {

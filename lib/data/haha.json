@@ -1,43 +1,55 @@
 {
-    "data": [
+    "rooms": [
         {
-            "name": "apple"
+            "roomNumber": "a001",
+            "status": "ready",
+            "type": "ward"
         },
         {
-            "name": "bark"
+            "roomNumber": "a002",
+            "status": "ready",
+            "type": "icu"
         },
         {
-            "name": "cow"
+            "roomNumber": "a003",
+            "status": "ready",
+            "type": "ward"
         },
         {
-            "name": "door"
+            "roomNumber": "a004",
+            "status": "ready",
+            "type": "icu"
         },
         {
-            "name": "elixir"
+            "roomNumber": "a005",
+            "status": "ready",
+            "type": "ward"
         },
         {
-            "name": "flutter"
+            "roomNumber": "a006",
+            "status": "ready",
+            "type": "ward"
         },
         {
-            "name": "go"
+            "roomNumber": "a007",
+            "status": "ready",
+            "type": "ward"
         },
         {
-            "name": "home"
+            "roomNumber": "a008",
+            "status": "ready",
+            "type": "ward"
         },
         {
-            "name": "iphone"
+            "roomNumber": "a009",
+            "status": "ready",
+            "type": "icu"
         },
         {
-            "name": "jenkin"
-        },
-        {
-            "name": "kaspry"
-        },
-        {
-            "name": "lua"
-        },
-        {
-            "name": "monolith"
+            "roomNumber": "a010",
+            "status": "ready",
+            "type": "icu"
         }
     ]
 }
+       
