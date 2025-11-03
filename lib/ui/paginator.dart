@@ -21,7 +21,7 @@ class Paginator {
       print("use q to quit");
 
       input = stdin.readLineSync();
-      if (input == 'a' && page < totalPage) {
+      if (input == 'a' && page < totalPage.floor()) {
         page++;
       } else if (input == 'c' && page > 1) {
         page--;
