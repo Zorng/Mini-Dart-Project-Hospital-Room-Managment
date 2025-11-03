@@ -23,7 +23,7 @@ class Paginator {
       input = stdin.readLineSync();
       if (input == 'a' && page < totalPage) {
         page++;
-      } else if (input == 'c' && page - 1 > 1) {
+      } else if (input == 'c' && page > 1) {
         page--;
       } else if (input == 'q') {
         return;
