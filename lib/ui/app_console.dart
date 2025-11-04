@@ -1,8 +1,24 @@
 import 'dart:io';
+import 'package:room_management/domain/dummy.dart';
+import 'package:room_management/ui/paginator.dart';
+import 'package:room_management/ui/table.dart';
+
+List<Column<Room>> roomColumns = [
+  Column<Room>(title: "Room Number", width: 15, data: (r) => r.roomNumber),
+  Column<Room>(title: "Status", width: 10, data: (r) => r.status),
+  Column<Room>(title: "Type", width: 10, data: (r) => r.type),
+];
 
 class AppConsole {
   String username = "Titan";
   String password = "1234";
+
+  Hosptial hospital;
+
+  Table<Room> roomTable;
+
+  AppConsole({required this.hospital})
+    : roomTable = Table(items: hospital.rooms, columns: roomColumns);
 
   bool login() {
     String? name;
@@ -28,24 +44,19 @@ class AppConsole {
     print('\n==============================================');
   }
 
-
   //AI generated
-  void clearConsole() {
+  static void clearConsole() {
     if (Platform.isWindows) {
       // Windows ANSI support
-      stdin.readLineSync();
       stdout.write('\x1B[2J\x1B[0;0H');
-      stdin.readLineSync();
     } else {
       // macOS / Linux
-      stdin.readLineSync();
       stdout.write('\x1B[2J\x1B[H');
     }
   }
 
   void console() {
     while (login() == false) {}
-   
 
     while (true) {
       line();
@@ -65,7 +76,21 @@ Enter number in the bracket to select.
         switch (s) {
           case '1':
             {
-              print("Room xxx");
+              int i = Paginator.paginate(roomTable);
+              if (i == -1) {
+                print(
+                  "\nPerform actions on a room: [1]. Update a room, [2]. Delete a room",
+                );
+                stdout.write("Enter an option: ");
+                String? input = stdin.readLineSync();
+                if (input == '1') {
+                  stdout.write("Select a room by room number: ");
+                  String ? id = stdin.readLineSync();
+                  print("$id");
+                }
+                if (input == '2') print("you tried to delete a room");
+              }
+
               break;
             }
           case '2':
