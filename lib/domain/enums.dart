@@ -1,23 +1,23 @@
 enum GenderPolicy {
-  MaleOnly,
-  FemaleOnly,
-  Mixed,
+  maleOnly,
+  femaleOnly,
+  mixed,
 }
 
 enum Gender{
-  Male,
-  Female
+  male,
+  female
 }
 
 enum Level {
-  lV1, 
-  lV2,
-  lV3,
+  lv1, 
+  lv2,
+  lv3,
 }
 
 enum BedAvailability {
-  Available,      
-  Occupied,       
-  Maintenance,    
-  NeedCleaning,   
+  available,      
+  occupied,       
+  maintenance,    
+  needCleaning,   
 }

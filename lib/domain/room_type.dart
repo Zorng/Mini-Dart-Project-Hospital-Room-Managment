@@ -1,8 +1,8 @@
 enum RoomType {
-  Shared(4, 6000),
-  SemiPrivate(2, 10000),
-  Private(1, 20000),
-  VIP(1, 30000);
+  shared(4, 6000),
+  semiPrivate(2, 10000),
+  private(1, 20000),
+  vip(1, 30000);
 
   final int capacity;
   final int centPerDay;
