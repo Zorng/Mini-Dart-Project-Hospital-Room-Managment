@@ -2,15 +2,16 @@ import 'people.dart';
 import 'enums.dart';
 
 class User extends People{
+  final Gender gender;
   final String passwordHash;
 
-  User(
-    String id,
-    String name,
-    String phone,
-    Gender gender,
-    this.passwordHash,
-  ) : super(id, name, phone, gender);
+  User({
+    required String id,
+    required String name,
+    required String phone,
+    required this.gender, 
+    required this.passwordHash,
+  }) : super(id: id, name: name, phone: phone);
 
   bool logIn({required String phone, required String password}){
     print('Attempting login for User $name via phone $phone...');
@@ -33,20 +34,23 @@ class User extends People{
   @override
   Map<String, dynamic> toJson() {
     return {
-      ...super.toJson(),
+      "id": id,
+      "name": name,
+      "phone": phone,
+      "gender": gender.name,
       "passwordHash": passwordHash,
     };
   }
 
   static User fromJson(Map<String, dynamic> json) {
-    final People basePeople = People.fromJson(json);
+    Gender genderFromStr(String name) => Gender.values.byName(name);
 
     return User(
-      basePeople.id,
-      basePeople.name,
-      basePeople.phone,
-      basePeople.gender,
-      json["passwordHash"] as String,
+      id: json['id'] as String,
+      name: json['name'] as String,
+      phone: json['phone'] as String,
+      gender: genderFromStr(json['gender'] as String), // <-- Read gender directly
+      passwordHash: json["passwordHash"] as String,
     );
   }
 }

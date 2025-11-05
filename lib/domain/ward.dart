@@ -1,91 +1,106 @@
-  import 'room.dart';
-  import 'bed.dart';
-  import 'enums.dart';
-  import 'room_type.dart';
-  import 'patient.dart';
+import 'room.dart';
+import 'bed.dart';
+import 'enums.dart';
+import 'room_type.dart';
+import 'patient.dart';
+import 'patient_stay.dart';
 
-  class Ward extends Room {
+class Ward extends Room {
+  Ward({
+    required String roomNumber,
+    required RoomType type,
+    required List<Bed> beds,
+    required GenderPolicy genderPolicy,
+    DateTime? lastCleaned,
+    bool isUnderMaintenance = false,
+  }) : super(
+         roomNumber: roomNumber,
+         type: type,
+         beds: beds,
+         genderPolicy: genderPolicy,
+         lastCleaned: lastCleaned,
+         isUnderMaintenance: isUnderMaintenance,
+       );
 
-    Ward(
-      String roomNumber, 
-      RoomType type, 
-      GenderPolicy genderPolicy
-    ) : super(roomNumber, type, genderPolicy);
-    
-    @override
-    bool canAdmit(Patient patient) {
-      // Check basic room availability
-      if (!isAvailable) {
-        print('Admission denied for ${patient.name}: Room $roomNumber is full or under maintenance.');
-        return false;
-      }
-
-      // Check gender policy
-      if (genderPolicy == GenderPolicy.mixed) {
-        return true;
-      }
-      
-      // Check male only
-      if (genderPolicy == GenderPolicy.maleOnly && patient.gender == Gender.male) {
-        return true;
-      }
-      
-      // Check female only
-      if (genderPolicy == GenderPolicy.femaleOnly && patient.gender == Gender.female) {
-        return true;
-      }
-
-      print('Admission denied for ${patient.name}: Gender policy violation in $roomNumber (${genderPolicy.name} only).');
+  @override
+  bool canAdmit(Patient patient) {
+    // Check basic room availability
+    if (!isAvailable) {
+      print(
+        'Admission denied for ${patient.name}: Room $roomNumber is full or under maintenance.',
+      );
       return false;
     }
-    
-    @override
-    void admitPatient(Patient patient) {
-      if (!canAdmit(patient)) {
-        return; 
-      }
-      
-      // Find first available bed
-      Bed? targetBed = beds.firstWhere(
-        (bed) => bed.isAvailable, 
-        orElse: () => throw Exception('Critical Error: Room $roomNumber passed canAdmit() but found no free beds.'),
-      );
-      
-      String newStayId = 'STAY-${DateTime.now().microsecondsSinceEpoch}';
 
-      // Assign the patient to the bed
-      targetBed.assignPatient(patient, newStayId);
-      print('Patient ${patient.name} admitted to Ward $roomNumber, Bed ${targetBed.bedId}.');
+    // Check gender policy
+    if (genderPolicy == GenderPolicy.mixed) {
+      return true;
     }
 
-    static Ward fromJson(Map<String, dynamic> json) {
-    // Helper functions to convert string names back to enums
-    RoomType typeFromStr(String name) => RoomType.values.firstWhere((e) => e.name == name);
-    GenderPolicy policyFromStr(String name) => GenderPolicy.values.firstWhere((e) => e.name == name);
-    
-    // Instantiate the Ward using the constructor (handles beds list initialization)
-    final Ward ward = Ward(
-      json["roomNumber"] as String,
-      typeFromStr(json["type"] as String),
-      policyFromStr(json["genderPolicy"] as String),
+    // Check male and female only
+    if ((genderPolicy == GenderPolicy.maleOnly &&
+            patient.gender == Gender.male) ||
+        (genderPolicy == GenderPolicy.femaleOnly &&
+            patient.gender == Gender.female)) {
+      return true;
+    }
+
+    print(
+      'Admission denied for ${patient.name}: Gender policy violation in $roomNumber (${genderPolicy.name} only).',
     );
-    
-    // Load the nested Bed objects from the JSON map
-    final List<Map<String, dynamic>> bedMaps = (json["beds"] as List).cast<Map<String, dynamic>>();
-    
-    // Deserialize each bed map using the Bed.fromJson method
-    ward.beds = bedMaps.map((bedMap) => Bed.fromJson(bedMap)).toList();
-    
-    // Load remaining properties that don't pass through the constructor
-    // lastCleaned can be null
-    if (json["lastCleaned"] != null) {
-      ward.lastCleaned = DateTime.parse(json["lastCleaned"] as String);
-    }
-    // isUnderMaintenance can be loaded if the file explicitly includes it
-    if (json["isUnderMaintenance"] != null) {
-      ward.isUnderMaintenance = json["isUnderMaintenance"] as bool;
+    return false;
+  }
+
+  @override
+  void admitPatient(Patient patient) {
+    if (!canAdmit(patient)) {
+      return;
     }
 
-    return ward;
+    // Find first available bed
+    Bed targetBed = beds.firstWhere(
+      (bed) => bed.isAvailable,
+      orElse: () => throw Exception(
+        'Critical Error: Room $roomNumber passed canAdmit() but found no free beds.',
+      ),
+    );
+
+    // create a new PatientStay record
+    final newStay = PatientStay(
+      stayId: 'STAY-${DateTime.now().millisecondsSinceEpoch}',
+      patientId: patient.id,
+      assignedBedId: targetBed.bedId,
+      assignedDate: DateTime.now(),
+      roomRateSnapshot: type,
+      roomNumberSnapshot: roomNumber,
+    );
+
+    // assign patient to the bed
+    targetBed.assignPatient(patient, newStay);
+
+    print(
+      'Patient ${patient.name} admitted to Ward $roomNumber, Bed ${targetBed.bedId}.',
+    );
+  }
+
+  static Ward fromJson(Map<String, dynamic> json) {
+    final RoomType type = RoomType.values.byName(json["type"] as String);
+    final GenderPolicy policy = GenderPolicy.values.byName(json["gender"] as String);
+
+    final List<Bed> beds = (json["beds"] as List)
+        .cast<Map<String, dynamic>>()
+        .map((bedMap) => Bed.fromJson(bedMap))
+        .toList();
+
+    DateTime? parseDate(String? dateString) => dateString != null ? DateTime.parse(dateString) : null;
+
+    return Ward(
+      roomNumber: json["roomNumber"] as String,
+      type: type,
+      beds: beds,
+      genderPolicy: policy,
+      lastCleaned: parseDate(json["lastCleaned"] as String?),
+      isUnderMaintenance: json["isUnderMaintenance"] as bool? ?? false,
+    );
   }
 }

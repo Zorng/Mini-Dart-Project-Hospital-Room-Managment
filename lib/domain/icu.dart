@@ -3,20 +3,31 @@ import 'bed.dart';
 import 'enums.dart';
 import 'room_type.dart';
 import 'patient.dart';
+import 'patient_stay.dart';
 
 class ICU extends Room {
   final bool hasVentilator;
   final bool hasCardiacMonitor;
   final Level acuityLevel;
 
-  ICU(
-    String roomNumber,
-    RoomType type,
-    GenderPolicy genderPolicy,
-    this.hasVentilator,
-    this.hasCardiacMonitor,
-    this.acuityLevel,
-  ) : super(roomNumber, type, genderPolicy);
+  ICU({
+    required String roomNumber,
+    required RoomType type,
+    required List<Bed> beds,
+    required GenderPolicy genderPolicy,
+    required this.hasVentilator,
+    required this.hasCardiacMonitor,
+    required this.acuityLevel,
+    DateTime? lastCleaned,
+    bool isUnderMaintenance = false,
+  }) : super(
+         roomNumber: roomNumber,
+         type: type,
+         beds: beds,
+         genderPolicy: genderPolicy,
+         lastCleaned: lastCleaned,
+         isUnderMaintenance: isUnderMaintenance,
+       );
 
   @override
   bool canAdmit(Patient patient) {
@@ -27,35 +38,31 @@ class ICU extends Room {
       return false;
     }
 
-    if (genderPolicy == GenderPolicy.maleOnly &&
-        patient.gender != Gender.male) {
+    if ((genderPolicy == GenderPolicy.maleOnly &&
+            patient.gender != Gender.male) ||
+        (genderPolicy == GenderPolicy.femaleOnly &&
+            patient.gender != Gender.female)) {
       print(
-        'Admmission denied for ${patient.name}: Gender policy violation in ICU $roomNumber.',
-      );
-      return false;
-    } else if (genderPolicy == GenderPolicy.femaleOnly &&
-        patient.gender != Gender.female) {
-      print(
-        'Admmission denied for ${patient.name}: Gender policy violation in ICU $roomNumber.',
+        'Admission denied for ${patient.name}: Gender policy violation in ICU $roomNumber.',
       );
       return false;
     }
 
     // Acuity level check
-    if (patient.requiredAcuity.index > acuityLevel.index) {
-      print(
-        'Admission denied for ${patient.name}: Acuity mismatch (Patient requires ${patient.requiredAcuity.name}, ICU is only ${acuityLevel.name}).',
-      );
-      return false;
-    }
+    // if (patient.requiredAcuity.index > acuityLevel.index) {
+    //   print(
+    //     'Admission denied for ${patient.name}: Acuity mismatch (Patient requires ${patient.requiredAcuity.name}, ICU is only ${acuityLevel.name}).',
+    //   );
+    //   return false;
+    // }
 
     // Ventilator resource check
-    if (patient.requiresVentilator && !hasVentilator) {
-      print(
-        'Admission denied for ${patient.name}: Patient requires ventilator, but ICU $roomNumber does not have one.',
-      );
-      return false;
-    }
+    // if (patient.requiresVentilator && !hasVentilator) {
+    //   print(
+    //     'Admission denied for ${patient.name}: Patient requires ventilator, but ICU $roomNumber does not have one.',
+    //   );
+    //   return false;
+    // }
 
     return true;
   }
@@ -66,18 +73,27 @@ class ICU extends Room {
       return;
     }
 
-    Bed? targetBed = beds.firstWhere(
+    Bed targetBed = beds.firstWhere(
       (bed) => bed.isAvailable,
       orElse: () => throw Exception(
         'Critical Error: ICU $roomNumber passed canAdmit() but found no free beds.',
       ),
     );
 
-    String newStayId = 'STAY-${DateTime.now().microsecondsSinceEpoch}';
-    targetBed.assignPatient(patient, newStayId);
-    print(
-      'Patient ${patient.name} admitted to ICU $roomNumber, Bed ${targetBed.bedId}.',
+    // create a new PatientStay record
+    final newStay = PatientStay(
+      stayId: 'STAY-${DateTime.now().microsecondsSinceEpoch}',
+      patientId: patient.id,
+      assignedBedId: targetBed.bedId,
+      assignedDate: DateTime.now(),
+      roomRateSnapshot: type,
+      roomNumberSnapshot: roomNumber,
+      acuitySnapshot: acuityLevel,
     );
+
+    // assign patient to the bed
+    targetBed.assignPatient(patient, newStay);
+    print('Patient ${patient.name} admitted to ICU $roomNumber, Bed ${targetBed.bedId}.');
   }
 
   @override
@@ -87,41 +103,33 @@ class ICU extends Room {
       ...super.toJson(),
       "hasVentilator": hasVentilator,
       "hasCardiacMonitor": hasCardiacMonitor,
-      "acuityLevelName": acuityLevel.name
+      "acuityLevelName": acuityLevel.name,
     };
   }
 
   static ICU fromJson(Map<String, dynamic> json) {
     // Helper functions to convert string names back to enums
-    RoomType typeFromStr(String name) => RoomType.values.firstWhere((e) => e.name == name);
-    GenderPolicy policyFromStr(String name) => GenderPolicy.values.firstWhere((e) => e.name == name);
-    Level acuityFromStr(String name) => Level.values.firstWhere((e) => e.name == name);
+    final RoomType type = RoomType.values.byName(json["type"] as String);
+    final GenderPolicy policy = GenderPolicy.values.byName(json["genderPolicy"] as String);
+    final Level level = Level.values.byName(json["acuityLevelName"] as String);
 
-    // Instantiate the ICU using the constructor
-    final ICU icu = ICU(
-      json["roomNumber"] as String,
-      typeFromStr(json["type"] as String),
-      policyFromStr(json["genderPolicy"] as String),
-      json["hasVentilator"] as bool,
-      json["hasCardiacMonitor"] as bool,
-      acuityFromStr(json["acuityLevelName"] as String),
+    final List<Bed> beds = (json["beds"] as List)
+        .cast<Map<String, dynamic>>()
+        .map((bedMap) => Bed.fromJson(bedMap))
+        .toList();
+
+    DateTime? parseDate(String? dateString) => dateString != null ? DateTime.parse(dateString) : null;
+
+    return ICU(
+      roomNumber: json["roomNumber"] as String,
+      type: type,
+      beds: beds,
+      genderPolicy: policy,
+      hasVentilator: json["hasVentilator"] as bool,
+      hasCardiacMonitor: json["hasCardiacMonitor"] as bool,
+      acuityLevel: level,
+      lastCleaned: parseDate(json["lastCleaned"] as String?),
+      isUnderMaintenance: json["isUnderMaintenance"] as bool? ?? false,
     );
-
-    // Deserialize the nested Bed objects from the JSON map
-    final List<Map<String, dynamic>> bedMaps = (json["beds"] as List).cast<Map<String, dynamic>>();
-
-    // Deserialize each bed map using the Bed.fromJson method
-    // and assign the new list of Bed objects to the ICU instance
-    icu.beds = bedMaps.map((bedMap) => Bed.fromJson(bedMap)).toList();
-
-    // Load remaining properties from the abstract Room base class
-    if (json["lastCleaned"] != null) {
-      icu.lastCleaned = DateTime.parse(json["lastCleaned"] as String);
-    }
-    if (json["isUnderMaintenance"] != null) {
-      icu.isUnderMaintenance = json["isUnderMaintenance"] as bool;
-    }
-
-    return icu;
   }
 }
