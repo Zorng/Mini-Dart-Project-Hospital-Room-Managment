@@ -52,9 +52,9 @@ class Ward extends Room {
   }
 
   @override
-  void admitPatient(Patient patient) {
+  PatientStay admitPatient(Patient patient) {
     if (!canAdmit(patient)) {
-      return;
+      throw Exception('Admission logic failure: admitted patient that could not be admitted.');
     }
 
     // Find first available bed
@@ -67,7 +67,7 @@ class Ward extends Room {
 
     // create a new PatientStay record
     final newStay = PatientStay(
-      stayId: 'STAY-${DateTime.now().millisecondsSinceEpoch}',
+      stayId: 'S-${DateTime.now().millisecondsSinceEpoch}',
       patientId: patient.id,
       assignedBedId: targetBed.bedId,
       assignedDate: DateTime.now(),
@@ -75,19 +75,52 @@ class Ward extends Room {
       roomNumberSnapshot: roomNumber,
     );
 
+    newStay.currentPatient = patient;
+    newStay.assignedBed = targetBed;
+
     // assign patient to the bed
     targetBed.assignPatient(patient, newStay);
 
     print(
       'Patient ${patient.name} admitted to Ward $roomNumber, Bed ${targetBed.bedId}.',
     );
+    return newStay;
+  }
+
+  static String _cleanRoomType(String rawType) {
+    // Remove hyphen and convert to lowercase for easier comparison: "semi-private" -> "semiprivate"
+    final String noHyphen = rawType.replaceAll('-', '').toLowerCase();
+
+    // Map the cleaned string to the exact Dart enum member name
+    switch (noHyphen) {
+      case 'semiprivate':
+        return 'semiPrivate';
+      case 'vip':
+        // Fixes case for 'vip' enum member
+        return 'vip';
+      case 'shared':
+      case 'private':
+        return noHyphen;
+      default:
+        return noHyphen;
+    }
   }
 
   static Ward fromJson(Map<String, dynamic> json) {
-    final RoomType type = RoomType.values.byName(json["type"] as String);
-    final GenderPolicy policy = GenderPolicy.values.byName(json["gender"] as String);
+    final String? typeString = json["type"] as String?;
+    if (typeString == null) {
+      throw ArgumentError('Missing required key "type" for Ward.');
+    }
+    final String cleanedTypeString = _cleanRoomType(typeString);
+    final RoomType type = RoomType.values.byName(cleanedTypeString);
+    
+    final String? genderString = json["gender"] as String?;
+    if (genderString == null) {
+      throw ArgumentError('Missing required key "gender" for Ward.');
+    }
+    final GenderPolicy policy = GenderPolicy.values.byName(genderString);
 
-    final List<Bed> beds = (json["beds"] as List)
+    final List<Bed> beds = (json["beds"] as List? ?? [])
         .cast<Map<String, dynamic>>()
         .map((bedMap) => Bed.fromJson(bedMap))
         .toList();

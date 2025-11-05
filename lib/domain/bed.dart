@@ -31,7 +31,7 @@ class Bed{
     currentPatient = patient;
     currentStayId = stay;
     status = BedAvailability.occupied;
-    print('Bed $bedId assigned to ${patient.name} (Stay: $stay.stayId})');
+    print('Bed $bedId assigned to ${patient.name} (Stay: ${stay.stayId})');
   }
 
   // discharge patient and then set the bed to need clean

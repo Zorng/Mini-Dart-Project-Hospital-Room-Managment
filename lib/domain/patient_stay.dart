@@ -65,14 +65,29 @@ class PatientStay{
   }
 
   static PatientStay fromJson(Map<String, dynamic> json) {
+
+    DateTime? parseDate(String? dateString) => dateString != null ? DateTime.parse(dateString) : null;
+
+    final String? stayId = json["stayId"] as String?;
+    if (stayId == null) throw ArgumentError('Missing required field "stayId".');
+
+    final String? patientId = json["patientId"] as String?;
+    if (patientId == null) throw ArgumentError('Missing required field "patientId".');
+
+    final String? bedId = json["bedId"] as String?;
+    if (bedId == null) throw ArgumentError('Missing required field "bedId" for Stay.');
+
+    final DateTime? assignedDate = parseDate(json["admitDate"] as String?);
+    if (assignedDate == null) throw ArgumentError('Missing or invalid required field "admitDate".');
+
+    final DateTime? dischargeDate = parseDate(json["dischargeDate"] as String?);
+
     return PatientStay(
-      stayId: json["stayId"] as String,
-      patientId: json["patientId"] as String,
-      assignedBedId: json["bedId"] as String,
-      assignedDate: DateTime.parse(json["admitDate"] as String),
-      dischargeDate: json["dischargeDate"] != null
-          ? DateTime.parse(json["dischargeDate"] as String)
-          : null,
+      stayId: stayId,
+      patientId: patientId,
+      assignedBedId: bedId, 
+      assignedDate: assignedDate,
+      dischargeDate: dischargeDate,
       roomRateSnapshot: null,
       acuitySnapshot: null,
       roomNumberSnapshot: null,

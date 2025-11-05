@@ -25,11 +25,16 @@ class Patient extends People{
   }
 
   static Patient fromJson(Map<String, dynamic> json) {
+    final String? genderString = json["gender"] as String?;
+    if (genderString == null) {
+      throw ArgumentError('Missing required field "gender" for Patient.');
+    }
+    final Gender gender = Gender.values.byName(genderString);
     return Patient(
       id: json["patientId"] as String,
       name: json["name"] as String,
       phone: json["phone"] as String,
-      gender: Gender.values.byName(json["gender"] as String),
+      gender: gender,
       dob: DateTime.parse(json["dob"] as String),
     );
   }

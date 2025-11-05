@@ -2,6 +2,7 @@ import 'bed.dart';
 import 'enums.dart';
 import 'room_type.dart';
 import 'patient.dart';
+import 'patient_stay.dart';
 
 abstract class Room{
   final String roomNumber;
@@ -49,7 +50,7 @@ abstract class Room{
 
   // Abstract method
   bool canAdmit(Patient patient);
-  void admitPatient(Patient patient);
+  PatientStay admitPatient(Patient patient);
 
   Map<String, dynamic> toJson() {
     return {

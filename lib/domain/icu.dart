@@ -68,9 +68,9 @@ class ICU extends Room {
   }
 
   @override
-  void admitPatient(Patient patient) {
+  PatientStay admitPatient(Patient patient) {
     if (!canAdmit(patient)) {
-      return;
+      throw Exception('Admission failed for ${patient.name} to ICU $roomNumber due to failed policies.');
     }
 
     Bed targetBed = beds.firstWhere(
@@ -82,7 +82,7 @@ class ICU extends Room {
 
     // create a new PatientStay record
     final newStay = PatientStay(
-      stayId: 'STAY-${DateTime.now().microsecondsSinceEpoch}',
+      stayId: 'S${DateTime.now().microsecondsSinceEpoch}',
       patientId: patient.id,
       assignedBedId: targetBed.bedId,
       assignedDate: DateTime.now(),
@@ -91,9 +91,14 @@ class ICU extends Room {
       acuitySnapshot: acuityLevel,
     );
 
+    newStay.currentPatient = patient;
+    newStay.assignedBed = targetBed;
+
     // assign patient to the bed
     targetBed.assignPatient(patient, newStay);
     print('Patient ${patient.name} admitted to ICU $roomNumber, Bed ${targetBed.bedId}.');
+
+    return newStay;
   }
 
   @override
@@ -107,26 +112,63 @@ class ICU extends Room {
     };
   }
 
+  static String _cleanRoomType(String rawType) {
+    final String noHyphen = rawType.replaceAll('-', '').toLowerCase();
+
+    switch (noHyphen) {
+      case 'semiprivate':
+        // Fixes case for 'semiPrivate' enum member
+        return 'semiPrivate';
+      case 'vip':
+        // Fixes case for 'vip' enum member
+        return 'vip';
+      case 'shared':
+      case 'private':
+        return noHyphen;
+      default:
+        return noHyphen;
+    }
+  }
+
   static ICU fromJson(Map<String, dynamic> json) {
     // Helper functions to convert string names back to enums
-    final RoomType type = RoomType.values.byName(json["type"] as String);
-    final GenderPolicy policy = GenderPolicy.values.byName(json["gender"] as String);
-    final Level level = Level.values.byName(json["acuityLevelName"] as String);
+    final String? typeString = json["type"] as String?;
+    if (typeString == null) {
+      throw ArgumentError('Missing required key "type" for ICU.');
+    }
 
-    final List<Bed> beds = (json["beds"] as List)
+    final String cleanedTypeString = _cleanRoomType(typeString);
+    final RoomType type = RoomType.values.byName(cleanedTypeString);
+
+    final String? genderString = json["gender"] as String?;
+    if (genderString == null) {
+      throw ArgumentError('Missing required key "gender" for ICU.');
+    }
+    final GenderPolicy policy = GenderPolicy.values.byName(genderString);
+
+    final String? levelString = json["level"] as String?;
+    if (levelString == null) {
+      throw ArgumentError('Missing required key "level" for ICU.');
+    }
+    final Level level = Level.values.byName(levelString.toLowerCase());
+
+    final List<Bed> beds = (json["beds"] as List? ?? [])
         .cast<Map<String, dynamic>>()
         .map((bedMap) => Bed.fromJson(bedMap))
         .toList();
 
     DateTime? parseDate(String? dateString) => dateString != null ? DateTime.parse(dateString) : null;
 
+    final bool hasVentilator = json["hasVentilator"] as bool? ?? false;
+    final bool hasCardiacMonitor = json["hasCardiacMonitor"] as bool? ?? false;
+
     return ICU(
       roomNumber: json["roomNumber"] as String,
       type: type,
       beds: beds,
       genderPolicy: policy,
-      hasVentilator: json["hasVentilator"] as bool,
-      hasCardiacMonitor: json["hasCardiacMonitor"] as bool,
+      hasVentilator: hasVentilator,
+      hasCardiacMonitor: hasCardiacMonitor,
       acuityLevel: level,
       lastCleaned: parseDate(json["lastCleaned"] as String?),
       isUnderMaintenance: json["isUnderMaintenance"] as bool? ?? false,
