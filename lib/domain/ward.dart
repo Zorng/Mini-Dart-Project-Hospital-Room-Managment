@@ -17,7 +17,7 @@ class Ward extends Room {
          roomNumber: roomNumber,
          type: type,
          beds: beds,
-         genderPolicy: genderPolicy,
+         genderPolicy: (type.capacity == 1) ? GenderPolicy.mixed : genderPolicy,
          lastCleaned: lastCleaned,
          isUnderMaintenance: isUnderMaintenance,
        );

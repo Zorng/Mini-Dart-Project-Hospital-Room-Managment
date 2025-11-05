@@ -110,7 +110,7 @@ class ICU extends Room {
   static ICU fromJson(Map<String, dynamic> json) {
     // Helper functions to convert string names back to enums
     final RoomType type = RoomType.values.byName(json["type"] as String);
-    final GenderPolicy policy = GenderPolicy.values.byName(json["genderPolicy"] as String);
+    final GenderPolicy policy = GenderPolicy.values.byName(json["gender"] as String);
     final Level level = Level.values.byName(json["acuityLevelName"] as String);
 
     final List<Bed> beds = (json["beds"] as List)
