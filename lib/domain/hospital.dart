@@ -37,16 +37,16 @@ class Hospital {
   }
 
   Patient createPatient({
+    required String id,
     required String name,
     required String phone,
     required Gender gender,
     required DateTime dob,
   }) {
-    final newId = 'P-${DateTime.now().millisecondsSinceEpoch}';
 
     // create new patient
     final newPatient = Patient(
-      id: newId,
+      id: id,
       name: name,
       phone: phone,
       gender: gender,
@@ -54,9 +54,6 @@ class Hospital {
     );
 
     patients.add(newPatient);
-    _patientMap[newId] = newPatient;
-
-    print('✅ Patient ${newPatient.name} created with ID $newId.');
     return newPatient;
   }
 

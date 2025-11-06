@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:room_management/domain/enums.dart';
 import 'package:room_management/domain/hospital.dart';
 import 'package:room_management/domain/room.dart';
 import 'package:room_management/domain/ward.dart';
@@ -73,6 +74,7 @@ List<Column<Bed>> bedColumn = [
 
 List<Column<Patient>> patientColumn = [
   Column<Patient>(title: "Patient ID", width: 15, data: (r) => r.id),
+  Column(title: "Status", width: 15, data: (r) => r.status.name),
   Column<Patient>(title: "Name", width: 15, data: (r) => r.name),
   Column<Patient>(title: "Gender", width: 15, data: (r) => r.gender.name),
   Column<Patient>(title: "DOB", width: 15, data: (r) => r.dob.toString()),
@@ -202,6 +204,49 @@ class AppConsole {
     }
   }
 
+  void enlistPatient() {
+    String id, name, phone, dateStr;
+    DateTime? dob;
+    Gender gender;
+    String? value;
+    print("Suggested ID P${hospital.patients.length + 1}");
+    stdout.write("ID: ");
+    value = stdin.readLineSync();
+    id = value ?? '';
+    stdout.write("Name: ");
+    value = stdin.readLineSync();
+    name = value ?? '';
+    stdout.write("Gender: [1]. Male, [2]. Female\n");
+    value = stdin.readLineSync();
+    print("value $value");
+    if (value != '1' && value != '2' || value == null) {
+      print("Error: bad option.");
+      return;
+    } else {
+      gender = value == '1' ? Gender.male : Gender.female;
+    }
+    stdout.write("Phone: ");
+    value = stdin.readLineSync();
+    phone = value ?? '';
+    stdout.write("DOB (YYYY-MM-DD): ");
+    value = stdin.readLineSync();
+    if (value == null || value.isEmpty) {
+      print("No date entered!");
+      return;
+    }
+
+    dob = DateTime.parse(value);
+
+    hospital.createPatient(
+      id: id,
+      name: name,
+      phone: phone,
+      gender: gender,
+      dob: dob,
+    );
+    print("Successfully enlisted a patient");
+  }
+
   //AI generated
   static void clearConsole() {
     if (Platform.isWindows) {
@@ -240,7 +285,7 @@ Enter number in the bracket to select.
   - View patients by status
   - Create patients Discharged 
 
-[Q]. Quit
+[q]. Quit
 ''');
       stdout.write("Select: ");
       String? s = stdin.readLineSync();
@@ -276,16 +321,37 @@ Enter number in the bracket to select.
 
           case '3':
             // [3]. Manage Patients
-            // - View patients by status
             // - Create patients
+            // - View patients by status
             {
-              int i = Paginator.paginate(
-                Table<Patient>(
-                  title: "List of Patients",
-                  items: hospital.patients,
-                  columns: patientColumn,
-                ),
+              print(
+                "Actions:\n[1]. Enlist a patient\n[2]. View All\n[3]. View not assigned\n[4]. View assigned\n[5]. View discharged",
               );
+              stdout.write("Your option: ");
+              String? input = stdin.readLineSync();
+              if (input == '1') {
+                enlistPatient();
+              } else if (input == '2') {
+                int i = Paginator.paginate(Table<Patient>(title: "List of all Patients", items: hospital.patients, columns: patientColumn));
+                if(i == -1) {
+                  break;
+                }
+              } else if (input == '3') {
+                int i = Paginator.paginate(Table<Patient>(title: "List of not assigned patients", items: hospital.patients.where((r) =>r.status == PatientStatus.notAssigned).toList(), columns: patientColumn));
+                if(i == -1) {
+                  break;
+                }
+              } else if (input == '4') {
+                int i = Paginator.paginate(Table<Patient>(title: "List of assigned patients", items: hospital.patients.where((r) =>r.status == PatientStatus.assigned).toList(), columns: patientColumn));
+                if(i == -1) {
+                  break;
+                }
+              } else if (input == '5') {
+                int i = Paginator.paginate(Table<Patient>(title: "List of discharged patients", items: hospital.patients.where((r) =>r.status == PatientStatus.discharged).toList(), columns: patientColumn));
+                if(i == -1) {
+                  break;
+                }
+              }
               break;
             }
           case '4':

@@ -7,13 +7,13 @@ class Patient extends People{
   PatientStatus status;
 
   Patient({
-    required String id,
-    required String name,
-    required String phone,
+    required super.id,
+    required super.name,
+    required super.phone,
     required this.gender,
     required this.dob,
     this.status = PatientStatus.notAssigned,
-  }) : super(id: id, name: name, phone: phone);
+  });
 
   void markAssigned(){
     status = PatientStatus.assigned;
