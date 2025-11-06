@@ -36,6 +36,30 @@ class Hospital {
     return false;
   }
 
+  Patient createPatient({
+    required String name,
+    required String phone,
+    required Gender gender,
+    required DateTime dob,
+  }) {
+    final newId = 'P-${DateTime.now().millisecondsSinceEpoch}';
+
+    // create new patient
+    final newPatient = Patient(
+      id: newId,
+      name: name,
+      phone: phone,
+      gender: gender,
+      dob: dob,
+    );
+
+    patients.add(newPatient);
+    _patientMap[newId] = newPatient;
+
+    print('✅ Patient ${newPatient.name} created with ID $newId.');
+    return newPatient;
+  }
+
   // resolveReferences used for link all related obj after load from JSON
   void resolveReferences() {
     print('Starting Reference Resolution');
