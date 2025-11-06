@@ -2,21 +2,24 @@ import 'bed.dart';
 import 'enums.dart';
 import 'room_type.dart';
 import 'patient.dart';
+import 'patient_stay.dart';
 
 abstract class Room{
   final String roomNumber;
   final RoomType type;
-  List<Bed> beds;
+  final List<Bed> beds;
+  final GenderPolicy genderPolicy;
   DateTime? lastCleaned;
-  GenderPolicy genderPolicy;
   bool isUnderMaintenance;
 
-  Room(
-    this.roomNumber,
-    this.type,
-    this.genderPolicy,
-    {this.isUnderMaintenance = false}
-  ) : beds = List.generate(type.capacity, (i) => Bed('$roomNumber-${i + 1}')); // init number of beds for this room type
+  Room({
+    required this.roomNumber,
+    required this.type,
+    required this.beds,
+    required this.genderPolicy,
+    this.lastCleaned,
+    this.isUnderMaintenance = false,
+  });
 
   int get freeBeds{
     return beds.where((bed) => bed.status == BedAvailability.available).length;
@@ -47,7 +50,7 @@ abstract class Room{
 
   // Abstract method
   bool canAdmit(Patient patient);
-  void admitPatient(Patient patient);
+  PatientStay admitPatient(Patient patient);
 
   Map<String, dynamic> toJson() {
     return {

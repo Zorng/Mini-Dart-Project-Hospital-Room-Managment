@@ -2,44 +2,40 @@ import 'people.dart';
 import 'enums.dart';
 
 class Patient extends People{
-  final Level requiredAcuity;
-  final bool requiresVentilator;
+  final Gender gender;
+  final DateTime dob;
 
-  Patient(
-    String id,
-    String name,
-    String phone,
-    Gender gender,
-    this.requiredAcuity,
-    {this.requiresVentilator = false}
-  ) : super(id, name, phone, gender);
+  Patient({
+    required String id,
+    required String name,
+    required String phone,
+    required this.gender,
+    required this.dob,
+  }) : super(id: id, name: name, phone: phone);
 
   @override
   Map<String, dynamic> toJson(){
     return{
-      ...super.toJson(),
-      "requiredAcuity": requiredAcuity.name,
-      "requiresVentilator": requiresVentilator,
+      "patientId": id,
+      "name": name,
+      "phone": phone,
+      "gender": gender.name,
+      "dob": dob.toIso8601String(),
     };
   }
 
   static Patient fromJson(Map<String, dynamic> json) {
-    final People basePeople = People.fromJson(json);
-
-    Level acuityFromStr(String name) {
-      return Level.values.firstWhere(
-        (e) => e.name == name,
-        orElse: () => Level.lv1, // Default
-      );
+    final String? genderString = json["gender"] as String?;
+    if (genderString == null) {
+      throw ArgumentError('Missing required field "gender" for Patient.');
     }
-
+    final Gender gender = Gender.values.byName(genderString);
     return Patient(
-      basePeople.id,
-      basePeople.name,
-      basePeople.phone,
-      basePeople.gender,
-      acuityFromStr(json["requiredAcuity"] as String),
-      requiresVentilator: json["requiresVentilator"] as bool,
+      id: json["patientId"] as String,
+      name: json["name"] as String,
+      phone: json["phone"] as String,
+      gender: gender,
+      dob: DateTime.parse(json["dob"] as String),
     );
   }
 }

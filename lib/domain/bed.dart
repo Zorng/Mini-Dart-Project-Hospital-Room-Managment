@@ -1,21 +1,22 @@
 import 'enums.dart';
 import 'patient.dart';
+import 'patient_stay.dart';
 
 class Bed{
   final String bedId;
   BedAvailability status;
+  final DateTime? lastClean;
+  final DateTime? lastAssigned;
 
   // Link to Patient and stay records
   Patient? currentPatient;
-  String? currentStayId;
-
-  DateTime? assignedDate;
+  PatientStay? currentStayId;
 
   Bed(this.bedId, {
     this.status = BedAvailability.available,
     this.currentPatient,
-    this.currentStayId,
-    this.assignedDate,
+    this.lastClean,
+    this.lastAssigned,
   });
 
   bool get isAvailable{
@@ -23,15 +24,14 @@ class Bed{
   }
 
   // mark the bed as Occupied and assigned it to patient
-  void assignPatient(Patient patient, String stayId){
+  void assignPatient(Patient patient, PatientStay stay){
     if(status != BedAvailability.available){
       throw Exception('Bed $bedId is not available (Status: ${status.name})');
     }
     currentPatient = patient;
-    currentStayId = stayId;
-    assignedDate = DateTime.now();
+    currentStayId = stay;
     status = BedAvailability.occupied;
-    print('Bed $bedId assigned to ${patient.name} (Stay: $stayId)');
+    print('Bed $bedId assigned to ${patient.name} (Stay: ${stay.stayId})');
   }
 
   // discharge patient and then set the bed to need clean
@@ -43,7 +43,6 @@ class Bed{
     // clear the reference
     currentPatient = null;
     currentStayId = null;
-    assignedDate = null;
 
     status = BedAvailability.needCleaning;
     print('Patient discharged from Bed $bedId. Status set to NeedCleaning.');
@@ -63,9 +62,8 @@ class Bed{
     return {
       "bedId": bedId,
       "status": status.name,
-      "currentPatientId": currentPatient?.id, 
-      "currentStayId": currentStayId,
-      "assignedDate": assignedDate?.toIso8601String(), 
+      "lastClean": lastClean?.toIso8601String(),
+      "lastAssigned": lastAssigned?.toIso8601String(),
     };
   }
 
@@ -77,13 +75,15 @@ class Bed{
       );
     }
 
+    DateTime? parseDate(String? dateString){
+      return dateString != null ? DateTime.parse(dateString) : null;
+    }
+
     return Bed(
       json["bedId"] as String,
       status: statusFromStr(json["status"] as String),
-      currentStayId: json["currentStayId"] as String?,
-      assignedDate: json["assignedDate"] != null
-          ? DateTime.parse(json["assignedDate"] as String)
-          : null,
+      lastClean: parseDate(json["lastClean"] as String?),
+      lastAssigned: parseDate(json['lastAssigned'] as String?),
     );
   }
 }
