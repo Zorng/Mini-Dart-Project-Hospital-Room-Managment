@@ -13,26 +13,62 @@ List<Column<Ward>> wardColumns = [
   Column<Ward>(title: "Room Number", width: 15, data: (r) => r.roomNumber),
   Column<Ward>(title: "Status", width: 15, data: (r) => r.overallStatus),
   Column<Ward>(title: "Type", width: 15, data: (r) => r.type.name.toString()),
-  Column<Ward>(title: "Price \$", width: 15, data: (r) => (r.type.centPerDay / 100).toString()),
-  Column<Ward>(title: "Gender Policy",width: 15,data: (r) => r.genderPolicy.toString(),),
-  Column<Ward>(title: "Available Beds",width: 15,data: (r) => r.freeBeds.toString(),),
-  Column<Ward>(title: "Last Cleaned",width: 15,data: (r) => r.lastCleaned.toString(),),
+  Column<Ward>(
+    title: "Price \$",
+    width: 15,
+    data: (r) => (r.type.centPerDay / 100).toString(),
+  ),
+  Column<Ward>(
+    title: "Gender Policy",
+    width: 15,
+    data: (r) => r.genderPolicy.toString(),
+  ),
+  Column<Ward>(
+    title: "Available Beds",
+    width: 15,
+    data: (r) => r.freeBeds.toString(),
+  ),
+  Column<Ward>(
+    title: "Last Cleaned",
+    width: 15,
+    data: (r) => r.lastCleaned.toString(),
+  ),
 ];
 
 List<Column<ICU>> icuColumns = [
   Column<ICU>(title: "Room Number", width: 15, data: (r) => r.roomNumber),
   Column<ICU>(title: "Status", width: 15, data: (r) => r.overallStatus),
   Column<ICU>(title: "Type", width: 15, data: (r) => r.type.name.toString()),
-  Column<ICU>(title: "Price", width: 15, data: (r) => (r.type.centPerDay / 100).toString()),
-  Column<ICU>(title: "Acuity Level",width: 15,data: (r) => r.level.toString(),),
-  Column<ICU>(title: "Last Cleaned",width: 14,data: (r) => r.lastCleaned.toString(),),
+  Column<ICU>(
+    title: "Price",
+    width: 15,
+    data: (r) => (r.type.centPerDay / 100).toString(),
+  ),
+  Column<ICU>(
+    title: "Acuity Level",
+    width: 15,
+    data: (r) => r.level.toString(),
+  ),
+  Column<ICU>(
+    title: "Last Cleaned",
+    width: 14,
+    data: (r) => r.lastCleaned.toString(),
+  ),
 ];
 
 List<Column<Bed>> bedColumn = [
   Column<Bed>(title: "Bed ID", width: 15, data: (r) => r.bedId),
   Column<Bed>(title: "Status", width: 15, data: (r) => r.status.toString()),
-  Column<Bed>(title: "Last Cleaned",width: 15,data: (r) => r.lastClean.toString(),),
-  Column<Bed>(title: "Last Assigned",width: 15,data: (r) => r.lastAssigned.toString(),),
+  Column<Bed>(
+    title: "Last Cleaned",
+    width: 15,
+    data: (r) => r.lastClean.toString(),
+  ),
+  Column<Bed>(
+    title: "Last Assigned",
+    width: 15,
+    data: (r) => r.lastAssigned.toString(),
+  ),
 ];
 
 List<Column<Patient>> patientColumn = [
@@ -46,8 +82,17 @@ List<Column<PatientStay>> patientStayColumn = [
   Column<PatientStay>(title: "ID", width: 15, data: (r) => r.stayId),
   Column<PatientStay>(title: "Patient ID", width: 15, data: (r) => r.patientId),
   Column<PatientStay>(title: "Bed ID", width: 15, data: (r) => r.assignedBedId),
-  Column<PatientStay>(title: "Assigned Date", width: 15, data: (r) => r.assignedDate.toString()),
-  Column<PatientStay>(title: "Discharge Date", width: 15, data: (r) => r.dischargeDate  == null? "not yet" : r.dischargeDate.toString()),
+  Column<PatientStay>(
+    title: "Assigned Date",
+    width: 15,
+    data: (r) => r.assignedDate.toString(),
+  ),
+  Column<PatientStay>(
+    title: "Discharge Date",
+    width: 15,
+    data: (r) =>
+        r.dischargeDate == null ? "not yet" : r.dischargeDate.toString(),
+  ),
 ];
 
 class AppConsole {
@@ -77,22 +122,37 @@ class AppConsole {
     }
   }
 
-  T? roomAction<T>(
-    T Function(Room room) action, {
-    String prompt = "Select a room by room number: ",
+  // AI refactored Code
+  /// Generic selector + action executor.
+  /// E  = entity type (Room, Patient, Bed, ...)
+  /// R  = return type of your callback (int, void, bool, ...)
+  R? selectAndDo<E, R>({
+    String prompt = "Enter an id: ",
+    String Function(String id)? normalize, // e.g., trim/uppercase
+    required E? Function(String id) lookup, // how to find the entity
+    required R Function(E entity) action, // what to do with it
+    void Function(Object e)? onError, // optional error hook
+    String Function(String id)? notFoundMessage, // custom message
   }) {
     try {
       stdout.write(prompt);
-      final id = stdin.readLineSync();
-      if (id == null) return null;
+      final raw = stdin.readLineSync();
+      if (raw == null) return null;
 
-      final room = hospital.getRoom(roomNumber: id);
-      if (room == null) {
-        print("room $id not found");
+      final id = (normalize != null) ? normalize(raw) : raw;
+      final entity = lookup(id);
+
+      if (entity == null) {
+        final msg = (notFoundMessage != null)
+            ? notFoundMessage(id)
+            : "Not found: $id";
+        print(msg);
         return null;
       }
-      return action(room);
+
+      return action(entity);
     } catch (e) {
+      onError?.call(e);
       print("Error: $e");
       return null;
     }
@@ -106,32 +166,40 @@ class AppConsole {
     String? input = stdin.readLineSync();
 
     if (input == '1') {
-      int? i = roomAction<int>((room) {
-        return Paginator.paginate(
+      int? i = selectAndDo<Room, int>(
+        prompt: "Select a room by room number",
+        normalize: (s) => s.trim().toLowerCase(),
+        lookup: (id) => hospital.getRoom(roomNumber: id),
+        action: (room) => Paginator.paginate(
           Table<Bed>(
             title: "Beds of Room ${room.roomNumber}",
             items: room.beds,
             columns: bedColumn,
           ),
-        );
-      });
+        ),
+      );
       if (i == -1) {
         print("\nactions:\n[q]. Back");
         stdout.write("Enter an option: ");
         String? input = stdin.readLineSync();
         if (input == 'q') return;
       }
-    } else if(input == '2') {
-      roomAction<void>((room) => room.markForMaintenance()); 
+    } else if (input == '2') {
+      selectAndDo<Room, void>(
+        prompt: "Select a room by room number: ",
+        lookup: (id) => hospital.getRoom(roomNumber: id),
+        action: (room) => room.markForMaintenance(),
+      );
+
       stdin.readLineSync();
-    } else if(input == '3') {
-      roomAction<void>((room) => room.clearMaintenance()); 
+    } else if (input == '3') {
+      selectAndDo<Room, void>(
+        prompt: "Select a room by room number: ",
+        lookup: (id) => hospital.getRoom(roomNumber: id),
+        action: (room) => room.clearMaintenance(),
+      );
       stdin.readLineSync();
     }
-  }
-
-  void line() {
-    print('\n==============================================');
   }
 
   //AI generated
@@ -149,15 +217,29 @@ class AppConsole {
     while (login() == false) {}
 
     while (true) {
-      line();
       print('''
+
+======================================
+Menu
+--------------------------------------
 Enter number in the bracket to select.
 
 [1]. Manage Wards
+  - View beds
+  - Maintenance Status
+
 [2]. Manage ICU
+  - View beds
+  - Maintenance Status
+
 [3]. Manage Patients
-[4]. Admit Patients
-[5]. Get patient bill
+  - View patients by status
+  - Create patients
+
+[4]. Manage Patient Stays
+  - View patients by status
+  - Create patients Discharged 
+
 [Q]. Quit
 ''');
       stdout.write("Select: ");
@@ -191,18 +273,31 @@ Enter number in the bracket to select.
                 roomActionsSelect();
               }
             }
+
           case '3':
+            // [3]. Manage Patients
+            // - View patients by status
+            // - Create patients
             {
-              print("im sick");
-              break;
-            }
-          case '4':
-            {
-               int i = Paginator.paginate(
+              int i = Paginator.paginate(
                 Table<Patient>(
                   title: "List of Patients",
                   items: hospital.patients,
                   columns: patientColumn,
+                ),
+              );
+              break;
+            }
+          case '4':
+            {
+              //[4]. Manage Patient Stays
+              // - View patients by status
+              // - Create patients Discharged
+              int i = Paginator.paginate(
+                Table<PatientStay>(
+                  title: "List of Patient Stay",
+                  items: hospital.stays,
+                  columns: patientStayColumn,
                 ),
               );
               break;
