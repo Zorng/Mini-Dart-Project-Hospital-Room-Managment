@@ -170,7 +170,7 @@ class AppConsole {
     if (input == '1') {
       int? i = selectAndDo<Room, int>(
         prompt: "Select a room by room number",
-        normalize: (s) => s.trim().toLowerCase(),
+        normalize: (s) => s.trim().toUpperCase(),
         lookup: (id) => hospital.getRoom(roomNumber: id),
         action: (room) => Paginator.paginate(
           Table<Bed>(
@@ -188,6 +188,7 @@ class AppConsole {
       }
     } else if (input == '2') {
       selectAndDo<Room, void>(
+        normalize: (s) => s.trim().toUpperCase(),
         prompt: "Select a room by room number: ",
         lookup: (id) => hospital.getRoom(roomNumber: id),
         action: (room) => room.markForMaintenance(),
@@ -196,6 +197,7 @@ class AppConsole {
       stdin.readLineSync();
     } else if (input == '3') {
       selectAndDo<Room, void>(
+        normalize: (s) => s.trim().toUpperCase(),
         prompt: "Select a room by room number: ",
         lookup: (id) => hospital.getRoom(roomNumber: id),
         action: (room) => room.clearMaintenance(),

@@ -337,50 +337,312 @@
     }
   ],
   "patients": [
-    { "patientId": "P001", "name": "Chan Dara",     "phone": "012345001", "gender": "male",   "status": "assigned",   "dob": "1990-03-12T00:00:00.000" },
-    { "patientId": "P002", "name": "Sok Vichea",    "phone": "012345002", "gender": "male",   "status": "assigned",   "dob": "1986-07-22T00:00:00.000" },
-    { "patientId": "P003", "name": "Kim Sreyleak",  "phone": "012345003", "gender": "female", "status": "assigned",   "dob": "1995-01-30T00:00:00.000" },
-    { "patientId": "P004", "name": "Long Rattanak", "phone": "012345004", "gender": "male",   "status": "assigned",   "dob": "1978-11-09T00:00:00.000" },
-    { "patientId": "P005", "name": "Men Socheata",  "phone": "012345005", "gender": "female", "status": "assigned",   "dob": "1992-05-17T00:00:00.000" },
-    { "patientId": "P006", "name": "Ly Sopheap",    "phone": "012345006", "gender": "male",   "status": "assigned",   "dob": "1988-02-14T00:00:00.000" },
-    { "patientId": "P007", "name": "Phan Chenda",   "phone": "012345007", "gender": "female", "status": "assigned",   "dob": "1975-09-05T00:00:00.000" },
-    { "patientId": "P008", "name": "Ung Bopha",     "phone": "012345008", "gender": "female", "status": "assigned",   "dob": "2001-12-21T00:00:00.000" },
-    { "patientId": "P009", "name": "Heng Vutha",    "phone": "012345009", "gender": "male",   "status": "discharged", "dob": "1984-04-03T00:00:00.000" },
-    { "patientId": "P010", "name": "Keo Rith",      "phone": "012345010", "gender": "male",   "status": "assigned",   "dob": "1998-06-28T00:00:00.000" },
-    { "patientId": "P011", "name": "Sun Mala",      "phone": "012345011", "gender": "female", "status": "assigned",   "dob": "1993-10-10T00:00:00.000" },
-    { "patientId": "P012", "name": "Chum Pisey",    "phone": "012345012", "gender": "female", "status": "discharged", "dob": "1999-08-16T00:00:00.000" },
-    { "patientId": "P013", "name": "Tea Sovann",    "phone": "012345013", "gender": "male",   "status": "assigned",   "dob": "1972-01-05T00:00:00.000" },
-    { "patientId": "P014", "name": "Bobo", "phone": "012345014", "gender": "female", "status": "assigned",   "dob": "2000-02-09T00:00:00.000" },
-    { "patientId": "P015", "name": "Bro Chhun", "phone": "012345014", "gender": "female", "status": "notAssigned",   "dob": "2000-02-09T00:00:00.000" },
-    { "patientId": "P016", "name": "Tesla", "phone": "012345014", "gender": "female", "status": "notAssigned",   "dob": "2000-02-09T00:00:00.000" },
-    { "patientId": "P017", "name": "Lim Kaliyanei", "phone": "012345014", "gender": "female", "status": "notAssigned",   "dob": "2000-02-09T00:00:00.000" },
-    { "patientId": "P018", "name": "Ouk Phalla",    "phone": "012345015", "gender": "male",   "status": "discharged", "dob": "1981-03-18T00:00:00.000" }
+    {
+      "patientId": "P001",
+      "name": "Chan Dara",
+      "phone": "012345001",
+      "gender": "male",
+      "status": "assigned",
+      "dob": "1990-03-12T00:00:00.000"
+    },
+    {
+      "patientId": "P002",
+      "name": "Sok Vichea",
+      "phone": "012345002",
+      "gender": "male",
+      "status": "assigned",
+      "dob": "1986-07-22T00:00:00.000"
+    },
+    {
+      "patientId": "P003",
+      "name": "Kim Sreyleak",
+      "phone": "012345003",
+      "gender": "female",
+      "status": "assigned",
+      "dob": "1995-01-30T00:00:00.000"
+    },
+    {
+      "patientId": "P004",
+      "name": "Long Rattanak",
+      "phone": "012345004",
+      "gender": "male",
+      "status": "assigned",
+      "dob": "1978-11-09T00:00:00.000"
+    },
+    {
+      "patientId": "P005",
+      "name": "Men Socheata",
+      "phone": "012345005",
+      "gender": "female",
+      "status": "assigned",
+      "dob": "1992-05-17T00:00:00.000"
+    },
+    {
+      "patientId": "P006",
+      "name": "Ly Sopheap",
+      "phone": "012345006",
+      "gender": "male",
+      "status": "assigned",
+      "dob": "1988-02-14T00:00:00.000"
+    },
+    {
+      "patientId": "P007",
+      "name": "Phan Chenda",
+      "phone": "012345007",
+      "gender": "female",
+      "status": "assigned",
+      "dob": "1975-09-05T00:00:00.000"
+    },
+    {
+      "patientId": "P008",
+      "name": "Ung Bopha",
+      "phone": "012345008",
+      "gender": "female",
+      "status": "assigned",
+      "dob": "2001-12-21T00:00:00.000"
+    },
+    {
+      "patientId": "P009",
+      "name": "Heng Vutha",
+      "phone": "012345009",
+      "gender": "male",
+      "status": "discharged",
+      "dob": "1984-04-03T00:00:00.000"
+    },
+    {
+      "patientId": "P010",
+      "name": "Keo Rith",
+      "phone": "012345010",
+      "gender": "male",
+      "status": "assigned",
+      "dob": "1998-06-28T00:00:00.000"
+    },
+    {
+      "patientId": "P011",
+      "name": "Sun Mala",
+      "phone": "012345011",
+      "gender": "female",
+      "status": "assigned",
+      "dob": "1993-10-10T00:00:00.000"
+    },
+    {
+      "patientId": "P012",
+      "name": "Chum Pisey",
+      "phone": "012345012",
+      "gender": "female",
+      "status": "discharged",
+      "dob": "1999-08-16T00:00:00.000"
+    },
+    {
+      "patientId": "P013",
+      "name": "Tea Sovann",
+      "phone": "012345013",
+      "gender": "male",
+      "status": "assigned",
+      "dob": "1972-01-05T00:00:00.000"
+    },
+    {
+      "patientId": "P014",
+      "name": "Bobo",
+      "phone": "012345014",
+      "gender": "female",
+      "status": "assigned",
+      "dob": "2000-02-09T00:00:00.000"
+    },
+    {
+      "patientId": "P015",
+      "name": "Bro Chhun",
+      "phone": "012345014",
+      "gender": "female",
+      "status": "notAssigned",
+      "dob": "2000-02-09T00:00:00.000"
+    },
+    {
+      "patientId": "P016",
+      "name": "Tesla",
+      "phone": "012345014",
+      "gender": "female",
+      "status": "notAssigned",
+      "dob": "2000-02-09T00:00:00.000"
+    },
+    {
+      "patientId": "P017",
+      "name": "Lim Kaliyanei",
+      "phone": "012345014",
+      "gender": "female",
+      "status": "notAssigned",
+      "dob": "2000-02-09T00:00:00.000"
+    },
+    {
+      "patientId": "P018",
+      "name": "Ouk Phalla",
+      "phone": "012345015",
+      "gender": "male",
+      "status": "discharged",
+      "dob": "1981-03-18T00:00:00.000"
+    }
   ],
   "stays": [
-  
-    { "stayId": "S001", "patientId": "P001", "bedId": "A00102", "admitDate": "2025-11-03T08:10:00.000", "dischargeDate": null },
-    { "stayId": "S002", "patientId": "P002", "bedId": "A00103", "admitDate": "2025-11-03T09:00:00.000", "dischargeDate": null },
-
-    { "stayId": "S003", "patientId": "P015", "bedId": "A00202", "admitDate": "2025-11-03T07:00:00.000", "dischargeDate": null },
-    { "stayId": "S004", "patientId": "P004", "bedId": "A00203", "admitDate": "2025-11-03T07:45:00.000", "dischargeDate": null },
-
-    { "stayId": "S005", "patientId": "P005", "bedId": "A00301", "admitDate": "2025-11-03T09:20:00.000", "dischargeDate": null },
-    { "stayId": "S006", "patientId": "P003", "bedId": "A00302", "admitDate": "2025-11-03T09:40:00.000", "dischargeDate": null },
-
-    { "stayId": "S007", "patientId": "P007", "bedId": "A00401", "admitDate": "2025-11-03T08:20:00.000", "dischargeDate": null },
-    { "stayId": "S008", "patientId": "P008", "bedId": "A00404", "admitDate": "2025-11-03T08:40:00.000", "dischargeDate": null },
-
-    { "stayId": "S017", "patientId": "P011", "bedId": "B00101", "admitDate": "2025-11-03T08:30:00.000", "dischargeDate": null },
-    { "stayId": "S019", "patientId": "P010", "bedId": "B00401", "admitDate": "2025-11-03T08:20:00.000", "dischargeDate": null },
-
-    { "stayId": "S021", "patientId": "P006", "bedId": "1L101",  "admitDate": "2025-11-03T08:20:00.000", "dischargeDate": null },
-    { "stayId": "S022", "patientId": "P013", "bedId": "2L201",  "admitDate": "2025-11-03T07:45:00.000", "dischargeDate": null },
-    { "stayId": "S023", "patientId": "P014", "bedId": "2V201",  "admitDate": "2025-11-03T07:55:00.000", "dischargeDate": null },
-
-   
-    { "stayId": "S024", "patientId": "P009", "bedId": "A00101", "admitDate": "2025-11-03T14:00:00.000", "dischargeDate": "2025-11-04T07:50:00.000" },
-    { "stayId": "S025", "patientId": "P012", "bedId": "A00201", "admitDate": "2025-11-03T13:10:00.000", "dischargeDate": "2025-11-04T06:30:00.000" },
-    { "stayId": "S026", "patientId": "P015", "bedId": "3L301",  "admitDate": "2025-11-03T10:10:00.000", "dischargeDate": "2025-11-04T08:40:00.000" }
+    {
+      "stayId": "S001",
+      "patientId": "P001",
+      "bedId": "A00102",
+      "admitDate": "2025-11-03T08:10:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A001"
+    },
+    {
+      "stayId": "S002",
+      "patientId": "P002",
+      "bedId": "A00103",
+      "admitDate": "2025-11-03T09:00:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A001"
+    },
+    {
+      "stayId": "S003",
+      "patientId": "P015",
+      "bedId": "A00202",
+      "admitDate": "2025-11-03T07:00:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A002"
+    },
+    {
+      "stayId": "S004",
+      "patientId": "P004",
+      "bedId": "A00203",
+      "admitDate": "2025-11-03T07:45:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A002"
+    },
+    {
+      "stayId": "S005",
+      "patientId": "P005",
+      "bedId": "A00301",
+      "admitDate": "2025-11-03T09:20:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A003"
+    },
+    {
+      "stayId": "S006",
+      "patientId": "P003",
+      "bedId": "A00302",
+      "admitDate": "2025-11-03T09:40:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A003"
+    },
+    {
+      "stayId": "S007",
+      "patientId": "P007",
+      "bedId": "A00401",
+      "admitDate": "2025-11-03T08:20:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A004"
+    },
+    {
+      "stayId": "S008",
+      "patientId": "P008",
+      "bedId": "A00404",
+      "admitDate": "2025-11-03T08:40:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A004"
+    },
+    {
+      "stayId": "S017",
+      "patientId": "P011",
+      "bedId": "B00101",
+      "admitDate": "2025-11-03T08:30:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "semiPrivate",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "B001"
+    },
+    {
+      "stayId": "S019",
+      "patientId": "P010",
+      "bedId": "B00401",
+      "admitDate": "2025-11-03T08:20:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "private",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "B004"
+    },
+    {
+      "stayId": "S021",
+      "patientId": "P006",
+      "bedId": "1L101",
+      "admitDate": "2025-11-03T08:20:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "private",
+      "acuitySnapshot": "lv1",
+      "roomNumberSnapshot": "1L101"
+    },
+    {
+      "stayId": "S022",
+      "patientId": "P013",
+      "bedId": "2L201",
+      "admitDate": "2025-11-03T07:45:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "private",
+      "acuitySnapshot": "lv2",
+      "roomNumberSnapshot": "2L201"
+    },
+    {
+      "stayId": "S023",
+      "patientId": "P014",
+      "bedId": "2V201",
+      "admitDate": "2025-11-03T07:55:00.000",
+      "dischargeDate": null,
+      "roomRateSnapshot": "vip",
+      "acuitySnapshot": "lv2",
+      "roomNumberSnapshot": "2V201"
+    },
+    {
+      "stayId": "S024",
+      "patientId": "P009",
+      "bedId": "A00101",
+      "admitDate": "2025-11-03T14:00:00.000",
+      "dischargeDate": "2025-11-04T07:50:00.000",
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A001"
+    },
+    {
+      "stayId": "S025",
+      "patientId": "P012",
+      "bedId": "A00201",
+      "admitDate": "2025-11-03T13:10:00.000",
+      "dischargeDate": "2025-11-04T06:30:00.000",
+      "roomRateSnapshot": "shared",
+      "acuitySnapshot": null,
+      "roomNumberSnapshot": "A002"
+    },
+    {
+      "stayId": "S026",
+      "patientId": "P015",
+      "bedId": "3L301",
+      "admitDate": "2025-11-03T10:10:00.000",
+      "dischargeDate": "2025-11-04T08:40:00.000",
+      "roomRateSnapshot": "private",
+      "acuitySnapshot": "lv3",
+      "roomNumberSnapshot": "3L301"
+    }
   ],
   "users": [
     {
