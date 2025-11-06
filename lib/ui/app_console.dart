@@ -4,67 +4,50 @@ import 'package:room_management/domain/room.dart';
 import 'package:room_management/domain/ward.dart';
 import 'package:room_management/domain/icu.dart';
 import 'package:room_management/domain/bed.dart';
+import 'package:room_management/domain/patient.dart';
+import 'package:room_management/domain/patient_stay.dart';
 import 'package:room_management/ui/paginator.dart';
 import 'package:room_management/ui/table.dart';
 
 List<Column<Ward>> wardColumns = [
   Column<Ward>(title: "Room Number", width: 15, data: (r) => r.roomNumber),
   Column<Ward>(title: "Status", width: 15, data: (r) => r.overallStatus),
-  Column<Ward>(
-    title: "Gender Policy",
-    width: 15,
-    data: (r) => r.genderPolicy.toString(),
-  ),
-  Column<Ward>(
-    title: "Available Beds",
-    width: 15,
-    data: (r) => r.freeBeds.toString(),
-  ),
-  Column<Ward>(
-    title: "Last Cleaned",
-    width: 15,
-    data: (r) => r.lastCleaned.toString(),
-  ),
+  Column<Ward>(title: "Type", width: 15, data: (r) => r.type.name.toString()),
+  Column<Ward>(title: "Price \$", width: 15, data: (r) => (r.type.centPerDay / 100).toString()),
+  Column<Ward>(title: "Gender Policy",width: 15,data: (r) => r.genderPolicy.toString(),),
+  Column<Ward>(title: "Available Beds",width: 15,data: (r) => r.freeBeds.toString(),),
+  Column<Ward>(title: "Last Cleaned",width: 15,data: (r) => r.lastCleaned.toString(),),
 ];
 
 List<Column<ICU>> icuColumns = [
   Column<ICU>(title: "Room Number", width: 15, data: (r) => r.roomNumber),
   Column<ICU>(title: "Status", width: 15, data: (r) => r.overallStatus),
-  Column<ICU>(
-    title: "Acuity Level",
-    width: 15,
-    data: (r) => r.level.toString(),
-  ),
-  Column<ICU>(
-    title: "Gender Policy",
-    width: 15,
-    data: (r) => r.genderPolicy.toString(),
-  ),
-  Column<ICU>(
-    title: "Available Beds",
-    width: 15,
-    data: (r) => r.freeBeds.toString(),
-  ),
-  Column<ICU>(
-    title: "Last Cleaned",
-    width: 14,
-    data: (r) => r.lastCleaned.toString(),
-  ),
+  Column<ICU>(title: "Type", width: 15, data: (r) => r.type.name.toString()),
+  Column<ICU>(title: "Price", width: 15, data: (r) => (r.type.centPerDay / 100).toString()),
+  Column<ICU>(title: "Acuity Level",width: 15,data: (r) => r.level.toString(),),
+  Column<ICU>(title: "Last Cleaned",width: 14,data: (r) => r.lastCleaned.toString(),),
 ];
 
 List<Column<Bed>> bedColumn = [
   Column<Bed>(title: "Bed ID", width: 15, data: (r) => r.bedId),
   Column<Bed>(title: "Status", width: 15, data: (r) => r.status.toString()),
-  Column<Bed>(
-    title: "Last Cleaned",
-    width: 15,
-    data: (r) => r.lastClean.toString(),
-  ),
-  Column<Bed>(
-    title: "Last Assigned",
-    width: 15,
-    data: (r) => r.lastAssigned.toString(),
-  ),
+  Column<Bed>(title: "Last Cleaned",width: 15,data: (r) => r.lastClean.toString(),),
+  Column<Bed>(title: "Last Assigned",width: 15,data: (r) => r.lastAssigned.toString(),),
+];
+
+List<Column<Patient>> patientColumn = [
+  Column<Patient>(title: "Patient ID", width: 15, data: (r) => r.id),
+  Column<Patient>(title: "Name", width: 15, data: (r) => r.name),
+  Column<Patient>(title: "Gender", width: 15, data: (r) => r.gender.name),
+  Column<Patient>(title: "DOB", width: 15, data: (r) => r.dob.toString()),
+];
+
+List<Column<PatientStay>> patientStayColumn = [
+  Column<PatientStay>(title: "ID", width: 15, data: (r) => r.stayId),
+  Column<PatientStay>(title: "Patient ID", width: 15, data: (r) => r.patientId),
+  Column<PatientStay>(title: "Bed ID", width: 15, data: (r) => r.assignedBedId),
+  Column<PatientStay>(title: "Assigned Date", width: 15, data: (r) => r.assignedDate.toString()),
+  Column<PatientStay>(title: "Discharge Date", width: 15, data: (r) => r.dischargeDate  == null? "not yet" : r.dischargeDate.toString()),
 ];
 
 class AppConsole {
@@ -205,22 +188,23 @@ Enter number in the bracket to select.
                 ),
               );
               if (i == -1) {
-                print(
-                  "\nPerform actions on a room: [1]. Update a room, [2]. Delete a room",
-                );
-                stdout.write("Enter an option: ");
-                String? input = stdin.readLineSync();
-                if (input == '1') {
-                  stdout.write("Select a room by room number: ");
-                  String? id = stdin.readLineSync();
-                  print("$id");
-                }
-                if (input == '2') print("you tried to delete a room");
+                roomActionsSelect();
               }
             }
           case '3':
             {
               print("im sick");
+              break;
+            }
+          case '4':
+            {
+               int i = Paginator.paginate(
+                Table<Patient>(
+                  title: "List of Patients",
+                  items: hospital.patients,
+                  columns: patientColumn,
+                ),
+              );
               break;
             }
           case 'q':
