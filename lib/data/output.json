@@ -1,0 +1,464 @@
+{
+  "rooms": [
+    {
+      "wards": [
+        {
+          "roomNumber": "A001",
+          "type": "shared",
+          "genderPolicy": "maleOnly",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "A00101",
+              "status": "needCleaning",
+              "lastClean": "2025-11-04T08:30:00.000",
+              "lastAssigned": "2025-11-03T21:45:00.000"
+            },
+            {
+              "bedId": "A00102",
+              "status": "occupied",
+              "lastClean": "2025-11-03T06:00:00.000",
+              "lastAssigned": "2025-11-03T08:10:00.000"
+            },
+            {
+              "bedId": "A00103",
+              "status": "occupied",
+              "lastClean": "2025-11-03T07:45:00.000",
+              "lastAssigned": "2025-11-03T09:00:00.000"
+            },
+            {
+              "bedId": "A00104",
+              "status": "available",
+              "lastClean": "2025-11-04T09:15:00.000",
+              "lastAssigned": "2025-11-03T18:00:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "A002",
+          "type": "shared",
+          "genderPolicy": "maleOnly",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "A00201",
+              "status": "available",
+              "lastClean": "2025-11-04T07:00:00.000",
+              "lastAssigned": "2025-11-03T20:10:00.000"
+            },
+            {
+              "bedId": "A00202",
+              "status": "occupied",
+              "lastClean": "2025-11-03T05:30:00.000",
+              "lastAssigned": "2025-11-03T07:00:00.000"
+            },
+            {
+              "bedId": "A00203",
+              "status": "occupied",
+              "lastClean": "2025-11-03T06:00:00.000",
+              "lastAssigned": "2025-11-03T07:45:00.000"
+            },
+            {
+              "bedId": "A00204",
+              "status": "available",
+              "lastClean": "2025-11-04T09:00:00.000",
+              "lastAssigned": "2025-11-03T19:00:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "A003",
+          "type": "shared",
+          "genderPolicy": "femaleOnly",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "A00301",
+              "status": "occupied",
+              "lastClean": "2025-11-03T08:00:00.000",
+              "lastAssigned": "2025-11-03T09:20:00.000"
+            },
+            {
+              "bedId": "A00302",
+              "status": "occupied",
+              "lastClean": "2025-11-03T08:10:00.000",
+              "lastAssigned": "2025-11-03T09:40:00.000"
+            },
+            {
+              "bedId": "A00303",
+              "status": "available",
+              "lastClean": "2025-11-04T08:45:00.000",
+              "lastAssigned": "2025-11-03T19:15:00.000"
+            },
+            {
+              "bedId": "A00304",
+              "status": "available",
+              "lastClean": "2025-11-04T08:50:00.000",
+              "lastAssigned": "2025-11-03T19:30:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "A004",
+          "type": "shared",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "A00401",
+              "status": "occupied",
+              "lastClean": "2025-11-03T07:00:00.000",
+              "lastAssigned": "2025-11-03T08:20:00.000"
+            },
+            {
+              "bedId": "A00402",
+              "status": "available",
+              "lastClean": "2025-11-04T09:30:00.000",
+              "lastAssigned": "2025-11-03T18:30:00.000"
+            },
+            {
+              "bedId": "A00403",
+              "status": "available",
+              "lastClean": "2025-11-04T09:35:00.000",
+              "lastAssigned": "2025-11-03T18:40:00.000"
+            },
+            {
+              "bedId": "A00404",
+              "status": "occupied",
+              "lastClean": "2025-11-03T07:10:00.000",
+              "lastAssigned": "2025-11-03T08:40:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "B001",
+          "type": "semiPrivate",
+          "genderPolicy": "femaleOnly",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "B00101",
+              "status": "occupied",
+              "lastClean": "2025-11-03T06:45:00.000",
+              "lastAssigned": "2025-11-03T08:30:00.000"
+            },
+            {
+              "bedId": "B00102",
+              "status": "available",
+              "lastClean": "2025-11-04T09:10:00.000",
+              "lastAssigned": "2025-11-03T18:45:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "B002",
+          "type": "private",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "B00201",
+              "status": "available",
+              "lastClean": "2025-11-04T08:50:00.000",
+              "lastAssigned": "2025-11-03T19:00:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "B003",
+          "type": "semiPrivate",
+          "genderPolicy": "femaleOnly",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "B00301",
+              "status": "available",
+              "lastClean": "2025-11-04T09:20:00.000",
+              "lastAssigned": "2025-11-03T20:00:00.000"
+            },
+            {
+              "bedId": "B00302",
+              "status": "available",
+              "lastClean": "2025-11-04T09:25:00.000",
+              "lastAssigned": "2025-11-03T19:50:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "B004",
+          "type": "private",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "B00401",
+              "status": "occupied",
+              "lastClean": "2025-11-03T07:00:00.000",
+              "lastAssigned": "2025-11-03T08:20:00.000"
+            }
+          ]
+        },
+        {
+          "roomNumber": "B005",
+          "type": "vip",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "B00501",
+              "status": "available",
+              "lastClean": "2025-11-04T09:40:00.000",
+              "lastAssigned": "2025-11-03T19:10:00.000"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "icus": [
+        {
+          "roomNumber": "1L101",
+          "type": "private",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "1L101",
+              "status": "occupied",
+              "lastClean": "2025-11-03T07:00:00.000",
+              "lastAssigned": "2025-11-03T08:20:00.000"
+            }
+          ],
+          "hasVentilator": true,
+          "hasCardiacMonitor": true,
+          "level": "lv1"
+        },
+        {
+          "roomNumber": "2L201",
+          "type": "private",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "2L201",
+              "status": "occupied",
+              "lastClean": "2025-11-03T06:30:00.000",
+              "lastAssigned": "2025-11-03T07:45:00.000"
+            }
+          ],
+          "hasVentilator": true,
+          "hasCardiacMonitor": true,
+          "level": "lv2"
+        },
+        {
+          "roomNumber": "3L301",
+          "type": "private",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "3L301",
+              "status": "available",
+              "lastClean": "2025-11-04T09:20:00.000",
+              "lastAssigned": "2025-11-03T18:30:00.000"
+            }
+          ],
+          "hasVentilator": true,
+          "hasCardiacMonitor": true,
+          "level": "lv3"
+        },
+        {
+          "roomNumber": "1V101",
+          "type": "vip",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "1V101",
+              "status": "available",
+              "lastClean": "2025-11-04T09:15:00.000",
+              "lastAssigned": "2025-11-03T18:45:00.000"
+            }
+          ],
+          "hasVentilator": true,
+          "hasCardiacMonitor": true,
+          "level": "lv1"
+        },
+        {
+          "roomNumber": "2V201",
+          "type": "vip",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "2V201",
+              "status": "occupied",
+              "lastClean": "2025-11-03T06:40:00.000",
+              "lastAssigned": "2025-11-03T07:55:00.000"
+            }
+          ],
+          "hasVentilator": true,
+          "hasCardiacMonitor": true,
+          "level": "lv2"
+        },
+        {
+          "roomNumber": "3V301",
+          "type": "vip",
+          "genderPolicy": "mixed",
+          "isUnderMaintenance": false,
+          "lastCleaned": null,
+          "beds": [
+            {
+              "bedId": "3V301",
+              "status": "available",
+              "lastClean": "2025-11-04T09:25:00.000",
+              "lastAssigned": "2025-11-03T19:00:00.000"
+            }
+          ],
+          "hasVentilator": true,
+          "hasCardiacMonitor": true,
+          "level": "lv3"
+        }
+      ]
+    }
+  ],
+  "patients": [
+    {
+      "patientId": "P001",
+      "name": "Chan Dara",
+      "phone": "012345001",
+      "gender": "male",
+      "dob": "1990-03-12T00:00:00.000"
+    },
+    {
+      "patientId": "P002",
+      "name": "Sok Vichea",
+      "phone": "012345002",
+      "gender": "male",
+      "dob": "1986-07-22T00:00:00.000"
+    },
+    {
+      "patientId": "P003",
+      "name": "Kim Sreyleak",
+      "phone": "012345003",
+      "gender": "female",
+      "dob": "1995-01-30T00:00:00.000"
+    },
+    {
+      "patientId": "P004",
+      "name": "Long Rattanak",
+      "phone": "012345004",
+      "gender": "male",
+      "dob": "1978-11-09T00:00:00.000"
+    },
+    {
+      "patientId": "P005",
+      "name": "Men Socheata",
+      "phone": "012345005",
+      "gender": "female",
+      "dob": "1992-05-17T00:00:00.000"
+    },
+    {
+      "patientId": "P006",
+      "name": "Ly Sopheap",
+      "phone": "012345006",
+      "gender": "male",
+      "dob": "1988-02-14T00:00:00.000"
+    },
+    {
+      "patientId": "P007",
+      "name": "Phan Chenda",
+      "phone": "012345007",
+      "gender": "female",
+      "dob": "1975-09-05T00:00:00.000"
+    },
+    {
+      "patientId": "P008",
+      "name": "Ung Bopha",
+      "phone": "012345008",
+      "gender": "female",
+      "dob": "2001-12-21T00:00:00.000"
+    },
+    {
+      "patientId": "P009",
+      "name": "Heng Vutha",
+      "phone": "012345009",
+      "gender": "male",
+      "dob": "1984-04-03T00:00:00.000"
+    },
+    {
+      "patientId": "P010",
+      "name": "Keo Rith",
+      "phone": "012345010",
+      "gender": "male",
+      "dob": "1998-06-28T00:00:00.000"
+    },
+    {
+      "patientId": "P011",
+      "name": "Sun Mala",
+      "phone": "012345011",
+      "gender": "female",
+      "dob": "1993-10-10T00:00:00.000"
+    },
+    {
+      "patientId": "P012",
+      "name": "Chum Pisey",
+      "phone": "012345012",
+      "gender": "female",
+      "dob": "1999-08-16T00:00:00.000"
+    },
+    {
+      "patientId": "P013",
+      "name": "Tea Sovann",
+      "phone": "012345013",
+      "gender": "male",
+      "dob": "1972-01-05T00:00:00.000"
+    },
+    {
+      "patientId": "P014",
+      "name": "Lim Kaliyanei",
+      "phone": "012345014",
+      "gender": "female",
+      "dob": "2000-02-09T00:00:00.000"
+    },
+    {
+      "patientId": "P015",
+      "name": "Ouk Phalla",
+      "phone": "012345015",
+      "gender": "male",
+      "dob": "1981-03-18T00:00:00.000"
+    }
+  ],
+  "stays": [
+    {
+      "stayId": "S-1762400794286",
+      "patientId": "P009",
+      "bedId": "A00101",
+      "admitDate": "2025-11-06T10:46:34.287091",
+      "dischargeDate": "2025-11-06T10:46:34.287763"
+    }
+  ],
+  "users": [
+    {
+      "id": "U001",
+      "name": "admin",
+      "phone": "xxxxx",
+      "gender": "male",
+      "passwordHash": "hhhh"
+    }
+  ]
+}
