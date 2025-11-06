@@ -3,6 +3,8 @@ import 'bed.dart';
 import 'patient.dart';
 import 'patient_stay.dart';
 import 'room.dart';
+import 'ward.dart';
+import 'icu.dart';
 import 'user.dart';
 
 class Hospital {
@@ -118,6 +120,22 @@ class Hospital {
     return null;
   }
 
+  Ward? getWard({required String roomNumber}) {
+    for (final r in rooms) {
+      if (r.roomNumber == roomNumber) return r as Ward;
+    }
+    return null;
+  }
+
+  ICU? getIcu({required String roomNumber}) {
+    for (final r in rooms) {
+      if (r.roomNumber == roomNumber) return r as ICU;
+    }
+    return null;
+  }
+
+
+   
   // admission/discharge method
   void admitPatientToRoom({
     required Patient patient,
@@ -133,47 +151,69 @@ class Hospital {
     patient.markAssigned();
   }
 
-  void dischargePatient({required String patientId}) {
-    // find active stay
-    final activeStays = stays
-        .where((s) => s.patientId == patientId && s.isActive)
-        .toList();
+  //AI refactored
+  void dischargePatient({required String stayId}) {
+  // 1) Find the stay record
+  final stay = stays.firstWhere(
+    (s) => s.stayId == stayId,
+    orElse: () => throw Exception('Stay $stayId not found.'),
+  );
 
-    if (activeStays.isEmpty) {
-      throw Exception(
-        'Patient $patientId is not currently admitted (No active stay found).',
-      );
-    }
-
-    final stay = activeStays.reduce(
-      (a, b) => a.assignedDate.isAfter(b.assignedDate) ? a : b,
-    );
-
-    final bed = stay.assignedBed;
-    final patient = stay.currentPatient;
-
-    if (bed == null || patient == null) {
-      throw Exception(
-        'Critical Data Error: Stay ${stay.stayId} has unlinked Patient or Bed.',
-      );
-    }
-
-    stay.recordDischarge(); // trigger discharge on PatientStay
-    bed.dischargePatient(); // trigger discharge on Bed
-    patient.markDischarged(); // update patient status
-
-    // Find the room the bed belongs to for status check
-    final room = rooms.firstWhere(
-      (r) => r.beds.any((b) => b.bedId == bed.bedId),
-      orElse: () => throw Exception(
-        'Critical Data Error: Bed ${bed.bedId} not found in any room list.',
-      ),
-    );
-
-    print('--- Discharge Complete ---');
-    print(
-      'Patient ${patient.name} discharged from Bed ${bed.bedId} in Room ${room.roomNumber}.',
-    );
-    print('Room ${room.roomNumber} status: ${room.overallStatus}');
+  // 2) Check if already discharged
+  if (!stay.isActive) {
+    throw Exception('Stay $stayId has already been discharged.');
   }
+
+  // 3) Resolve patient and bed references safely
+  final patient = stay.currentPatient ??
+      patients.firstWhere(
+        (p) => p.id == stay.patientId,
+        orElse: () => throw Exception(
+          'Critical Data Error: Patient ${stay.patientId} not found for stay $stayId.',
+        ),
+      );
+
+  Bed? bed = stay.assignedBed;
+  Room? room;
+
+  if (bed == null) {
+    // Find the bed in hospital rooms
+    for (final r in rooms) {
+      final hit = r.beds.where((b) => b.bedId == stay.assignedBedId).toList();
+      if (hit.isNotEmpty) {
+        bed = hit.first;
+        room = r;
+        break;
+      }
+    }
+    if (bed == null) {
+      throw Exception(
+        'Critical Data Error: Bed ${stay.assignedBedId} not found for stay $stayId.',
+      );
+    }
+  }
+
+  room ??= rooms.firstWhere(
+    (r) => r.beds.any((b) => b.bedId == bed!.bedId),
+    orElse: () => throw Exception(
+      'Critical Data Error: Bed ${bed!.bedId} not mapped to any room.',
+    ),
+  );
+
+  // 4) Perform discharge
+  stay.assignedBed ??= bed;
+  stay.currentPatient ??= patient;
+
+  stay.recordDischarge();   // mark stay as discharged
+  bed.dischargePatient();   // mark bed available
+  patient.markDischarged(); // update patient status
+
+  // 5) Output summary
+  print('--- Discharge Complete ---');
+  print('Stay ID: ${stay.stayId}');
+  print('Patient: ${patient.name} (${patient.id})');
+  print('Bed: ${bed.bedId}');
+  print('Room: ${room.roomNumber}');
+  print('Discharged at: ${stay.dischargeDate}');
+}
 }

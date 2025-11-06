@@ -15,11 +15,14 @@ enum Gender{
 }
 
 enum Level {
-  lv1, 
-  lv2,
-  lv3;
+  lv1(100), 
+  lv2(120),
+  lv3(130);
+
+  final int rateMultiplier;
   @override
   String toString() => name;
+  const Level(this.rateMultiplier);
 }
 
 enum BedAvailability {

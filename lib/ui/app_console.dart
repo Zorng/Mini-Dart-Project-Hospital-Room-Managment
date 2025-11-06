@@ -83,7 +83,36 @@ List<Column<Patient>> patientColumn = [
 List<Column<PatientStay>> patientStayColumn = [
   Column<PatientStay>(title: "ID", width: 15, data: (r) => r.stayId),
   Column<PatientStay>(title: "Patient ID", width: 15, data: (r) => r.patientId),
+  Column<PatientStay>(
+    title: "Room Number",
+    width: 15,
+    data: (r) => r.roomNumberSnapshot,
+  ),
   Column<PatientStay>(title: "Bed ID", width: 15, data: (r) => r.assignedBedId),
+  Column<PatientStay>(
+    title: "Room Type",
+    width: 15,
+    data: (r) => (r.roomRateSnapshot.name),
+  ),
+  Column<PatientStay>(
+    title: "Room Rate",
+    width: 15,
+    data: (r) => (r.roomRateSnapshot.centPerDay / 100).toString(),
+  ),
+  Column<PatientStay>(
+    title: "ICU Level",
+    width: 15,
+    data: (r) => r.acuitySnapshot?.name ?? 'none',
+  ),
+  Column<PatientStay>(
+    title: "ICU rate",
+    width: 15,
+    data: (r) {
+      final m = r.acuitySnapshot?.rateMultiplier;
+      return (m == null) ? 'none' : (m / 100).toString();
+    },
+  ),
+
   Column<PatientStay>(
     title: "Assigned Date",
     width: 15,
@@ -215,7 +244,7 @@ class AppConsole {
             .toList(),
         columns: patientColumn,
       ),
-      eButtonTitle: "select patient"
+      eButtonTitle: "select patient",
     );
     selectAndDo<Patient, void>(
       prompt: "Enter patient id: ",
@@ -239,7 +268,26 @@ class AppConsole {
               items: hospital.rooms.whereType<Ward>().cast<Ward>().toList(),
               columns: wardColumns,
             ),
-            eButtonTitle: "go to select room"
+            eButtonTitle: "go to select room",
+          );
+          selectAndDo<Ward, void>(
+            prompt: "Select a room by room number: ",
+            normalize: (s) => s.trim().toUpperCase(),
+            lookup: (id) => hospital.getWard(roomNumber: id), // -> Room?
+            action: (room) {
+              try {
+                hospital.admitPatientToRoom(
+                  patient: patient,
+                  roomNumber: room.roomNumber,
+                );
+                print("Admitted ${patient.name} to room ${room.roomNumber}");
+                stdin.readLineSync();
+              } catch (e) {
+                print("Admit failed: $e");
+                stdin.readLineSync();
+              }
+            },
+            notFoundMessage: (id) => "Room $id not found.",
           );
         } else if (roomOption == '2') {
           Paginator.paginate(
@@ -248,29 +296,28 @@ class AppConsole {
               items: hospital.rooms.whereType<ICU>().cast<ICU>().toList(),
               columns: icuColumns,
             ),
-            eButtonTitle: "go to select room"
+            eButtonTitle: "go to select room",
+          );
+          selectAndDo<ICU, void>(
+            prompt: "Select a room by room number: ",
+            normalize: (s) => s.trim().toUpperCase(),
+            lookup: (id) => hospital.getIcu(roomNumber: id), // -> Room?
+            action: (room) {
+              try {
+                hospital.admitPatientToRoom(
+                  patient: patient,
+                  roomNumber: room.roomNumber,
+                );
+                print("Admitted ${patient.name} to room ${room.roomNumber}");
+                stdin.readLineSync();
+              } catch (e) {
+                print("Admit failed: $e");
+                stdin.readLineSync();
+              }
+            },
+            notFoundMessage: (id) => "Room $id not found.",
           );
         }
-
-        selectAndDo<Room, void>(
-          prompt: "Select a room by room number: ",
-          normalize: (s) => s.trim().toUpperCase(),
-          lookup: (id) => hospital.getRoom(roomNumber: id), // -> Room?
-          action: (room) {
-            try {
-              hospital.admitPatientToRoom(
-                patient: patient,
-                roomNumber: room.roomNumber,
-              );
-              print("Admitted ${patient.name} to room ${room.roomNumber}");
-              stdin.readLineSync();
-            } catch (e) {
-              print("Admit failed: $e");
-              stdin.readLineSync();
-            }
-          },
-          notFoundMessage: (id) => "Room $id not found.",
-        );
       },
       notFoundMessage: (id) => "Patient $id not found.",
     );
@@ -319,6 +366,34 @@ class AppConsole {
     print("Successfully enlisted a patient");
   }
 
+  void dischargeFlowByStayId() {
+    Paginator.paginate(
+      Table<PatientStay>(
+        title: "List of all assigned stays ",
+        items: hospital.stays.where((s) => s.dischargeDate == null).toList(),
+        columns: patientStayColumn,
+      ),
+      eButtonTitle: "select stay id"
+    );
+    selectAndDo<PatientStay, void>(
+      prompt: "Enter stay ID to discharge: ",
+      normalize: (s) => s.trim().toUpperCase(),
+      lookup: (id) {
+        final it = hospital.stays.where((s) => s.stayId == id);
+        return it.isEmpty ? null : it.first;
+      },
+      action: (stay) {
+        try {
+          hospital.dischargePatient(stayId: stay.stayId);
+          print("Bill: \$${stay.getPatientStayBill()}");
+        } catch (e) {
+          print(' $e');
+        }
+      },
+      notFoundMessage: (id) => "Stay $id not found.",
+    );
+  }
+
   //AI generated
   static void clearConsole() {
     if (Platform.isWindows) {
@@ -356,9 +431,8 @@ Enter number in the bracket to select.
 [4]. Admit a patient to a room
 
 [5]. Manage Patient Stays
-- admit patient to room
-- View patients by status
-- Create patients Discharged 
+- discharge stays
+- view stays by status
 
 [q]. Quit
 ''');
@@ -472,13 +546,42 @@ Enter number in the bracket to select.
               //[5]. Manage Patient Stays
               // - View patients by status
               // - Discharged Patient
-              int i = Paginator.paginate(
-                Table<PatientStay>(
-                  title: "List of Patient Stay",
-                  items: hospital.stays,
-                  columns: patientStayColumn,
-                ),
+              print(
+                "Actions:\n[1]. Discharged a patient\n[2]. View All\n[3]. View assigned\n[4]. View discharged",
               );
+              stdout.write("Your option: ");
+              String? input = stdin.readLineSync();
+              if (input == '1') {
+                dischargeFlowByStayId();
+              } else if (input == '2') {
+                Paginator.paginate(
+                  Table<PatientStay>(
+                    title: "List of all Patient Stay ",
+                    items: hospital.stays,
+                    columns: patientStayColumn,
+                  ),
+                );
+              } else if (input == '3') {
+                Paginator.paginate(
+                  Table<PatientStay>(
+                    title: "List of all assigned stays ",
+                    items: hospital.stays
+                        .where((s) => s.dischargeDate == null)
+                        .toList(),
+                    columns: patientStayColumn,
+                  ),
+                );
+              } else if (input == '4') {
+                Paginator.paginate(
+                  Table<PatientStay>(
+                    title: "List of all discharged stays ",
+                    items: hospital.stays
+                        .where((s) => s.dischargeDate != null)
+                        .toList(),
+                    columns: patientStayColumn,
+                  ),
+                );
+              }
               break;
             }
           case 'q':
@@ -488,7 +591,7 @@ Enter number in the bracket to select.
             }
           default:
             {
-              print("im not sure what you want to do");
+              break;
             }
         }
       }
