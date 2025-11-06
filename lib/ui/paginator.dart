@@ -5,7 +5,7 @@ import 'dart:io';
 class Paginator {
   static int itemPerPage = 6;
 
-  static int paginate(Table table) {  
+  static int paginate(Table table, {String eButtonTitle = "peform actions"}) {  
     String ?input;
     int page = 1;
     double totalPage = (table.items.length + itemPerPage - 1) / itemPerPage;
@@ -23,7 +23,7 @@ class Paginator {
       // print("Press e to select actions");
       // print("Press q to return");
 
-      print("\nPage naviagtion:\n[a]. previous page\n[d]. next page\n[e]. perform actions\n[q]. return");
+      print("\nPage naviagtion:\n[a]. previous page\n[d]. next page\n[e]. $eButtonTitle\n[q]. return");
       stdout.write("\nEnter an option: ");
 
       input = stdin.readLineSync();

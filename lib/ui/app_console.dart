@@ -204,6 +204,76 @@ class AppConsole {
     }
   }
 
+  void admitFlow() {
+    Paginator.paginate(
+      Table<Patient>(
+        title: "List of not assigned patients",
+        items: hospital.patients
+            .where((r) => r.status == PatientStatus.notAssigned)
+            .toList(),
+        columns: patientColumn,
+      ),
+      eButtonTitle: "select patient"
+    );
+    selectAndDo<Patient, void>(
+      prompt: "Enter patient id: ",
+      normalize: (s) => s.trim().toUpperCase(),
+      lookup: (id) => hospital.getPatientById(id),
+      action: (patient) {
+        if (patient.status == PatientStatus.assigned) {
+          print("Patient ${patient.id} is already admitted.");
+          return;
+        }
+
+        print("Assign to:\n[1]. Ward\n[2]. ICU");
+        String? roomOption = stdin.readLineSync();
+        if (roomOption != '1' && roomOption != '2' || roomOption == null) {
+          return;
+        }
+        if (roomOption == '1') {
+          Paginator.paginate(
+            Table<Ward>(
+              title: "List of Wards",
+              items: hospital.rooms.whereType<Ward>().cast<Ward>().toList(),
+              columns: wardColumns,
+            ),
+            eButtonTitle: "go to select room"
+          );
+        } else if (roomOption == '2') {
+          Paginator.paginate(
+            Table<ICU>(
+              title: "List of ICU",
+              items: hospital.rooms.whereType<ICU>().cast<ICU>().toList(),
+              columns: icuColumns,
+            ),
+            eButtonTitle: "go to select room"
+          );
+        }
+
+        selectAndDo<Room, void>(
+          prompt: "Select a room by room number: ",
+          normalize: (s) => s.trim().toUpperCase(),
+          lookup: (id) => hospital.getRoom(roomNumber: id), // -> Room?
+          action: (room) {
+            try {
+              hospital.admitPatientToRoom(
+                patient: patient,
+                roomNumber: room.roomNumber,
+              );
+              print("Admitted ${patient.name} to room ${room.roomNumber}");
+              stdin.readLineSync();
+            } catch (e) {
+              print("Admit failed: $e");
+              stdin.readLineSync();
+            }
+          },
+          notFoundMessage: (id) => "Room $id not found.",
+        );
+      },
+      notFoundMessage: (id) => "Patient $id not found.",
+    );
+  }
+
   void enlistPatient() {
     String id, name, phone, dateStr;
     DateTime? dob;
@@ -270,20 +340,23 @@ Menu
 Enter number in the bracket to select.
 
 [1]. Manage Wards
-  - View beds
-  - Maintenance Status
+- View beds
+- Maintenance Status
 
 [2]. Manage ICU
-  - View beds
-  - Maintenance Status
+- View beds
+- Maintenance Status
 
 [3]. Manage Patients
-  - View patients by status
-  - Create patients
+- View patients by status
+- Create patients
 
-[4]. Manage Patient Stays
-  - View patients by status
-  - Create patients Discharged 
+[4]. Admit a patient to a room
+
+[5]. Manage Patient Stays
+- admit patient to room
+- View patients by status
+- Create patients Discharged 
 
 [q]. Quit
 ''');
@@ -332,33 +405,71 @@ Enter number in the bracket to select.
               if (input == '1') {
                 enlistPatient();
               } else if (input == '2') {
-                int i = Paginator.paginate(Table<Patient>(title: "List of all Patients", items: hospital.patients, columns: patientColumn));
-                if(i == -1) {
+                int i = Paginator.paginate(
+                  Table<Patient>(
+                    title: "List of all Patients",
+                    items: hospital.patients,
+                    columns: patientColumn,
+                  ),
+                );
+                if (i == -1) {
                   break;
                 }
               } else if (input == '3') {
-                int i = Paginator.paginate(Table<Patient>(title: "List of not assigned patients", items: hospital.patients.where((r) =>r.status == PatientStatus.notAssigned).toList(), columns: patientColumn));
-                if(i == -1) {
+                int i = Paginator.paginate(
+                  Table<Patient>(
+                    title: "List of not assigned patients",
+                    items: hospital.patients
+                        .where((r) => r.status == PatientStatus.notAssigned)
+                        .toList(),
+                    columns: patientColumn,
+                  ),
+                );
+                if (i == -1) {
                   break;
                 }
               } else if (input == '4') {
-                int i = Paginator.paginate(Table<Patient>(title: "List of assigned patients", items: hospital.patients.where((r) =>r.status == PatientStatus.assigned).toList(), columns: patientColumn));
-                if(i == -1) {
+                int i = Paginator.paginate(
+                  Table<Patient>(
+                    title: "List of assigned patients",
+                    items: hospital.patients
+                        .where((r) => r.status == PatientStatus.assigned)
+                        .toList(),
+                    columns: patientColumn,
+                  ),
+                );
+                if (i == -1) {
                   break;
                 }
               } else if (input == '5') {
-                int i = Paginator.paginate(Table<Patient>(title: "List of discharged patients", items: hospital.patients.where((r) =>r.status == PatientStatus.discharged).toList(), columns: patientColumn));
-                if(i == -1) {
+                int i = Paginator.paginate(
+                  Table<Patient>(
+                    title: "List of discharged patients",
+                    items: hospital.patients
+                        .where((r) => r.status == PatientStatus.discharged)
+                        .toList(),
+                    columns: patientColumn,
+                  ),
+                );
+                if (i == -1) {
                   break;
                 }
               }
               break;
             }
+
           case '4':
             {
-              //[4]. Manage Patient Stays
+              //[4]. admit a patient to a room.
+              admitFlow();
+              break;
+            }
+
+          case '5':
+            {
+              //[5]. Manage Patient Stays
               // - View patients by status
-              // - Create patients Discharged
+              // - Discharged Patient
               int i = Paginator.paginate(
                 Table<PatientStay>(
                   title: "List of Patient Stay",
