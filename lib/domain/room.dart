@@ -4,7 +4,7 @@ import 'room_type.dart';
 import 'patient.dart';
 import 'patient_stay.dart';
 
-abstract class Room{
+abstract class Room {
   final String roomNumber;
   final RoomType type;
   final List<Bed> beds;
@@ -21,29 +21,39 @@ abstract class Room{
     this.isUnderMaintenance = false,
   });
 
-  int get freeBeds{
+  int get freeBeds {
     return beds.where((bed) => bed.status == BedAvailability.available).length;
   }
 
-  bool get isAvailable{
+  bool get isAvailable {
     return !isUnderMaintenance && freeBeds > 0;
   }
 
-  String get overallStatus{
-    if(isUnderMaintenance) return 'Maintenance';
-    if(beds.any((b) => b.status == BedAvailability.needCleaning)) return "Needs Cleaning";
-    if(beds.every((b) => b.status == BedAvailability.available)) return "Ready";
-    if(beds.every((b) => b.status == BedAvailability.occupied)) return "Full";
-
-    return "Mixed";
+  String get overallStatus {
+    if (isUnderMaintenance) {
+      return 'Maintenance';
+    } else if (beds.any((b) => b.status == BedAvailability.needCleaning)) {
+      return "Needs Cleaning";
+    } else if (beds.every((b) => b.status == BedAvailability.occupied)) {
+      return "Full";
+    } else {
+      return 'Ready';
+    }
   }
 
-  void markForMaintenance(){
-    isUnderMaintenance = true;
-    print('Room $roomNumber marked for maintenace. Admission blocked!');
+  void markForMaintenance() {
+    if (beds.every((b) => b.status == BedAvailability.available)) {
+      isUnderMaintenance = true;
+    } else {
+      throw Exception("Occupied beds exist. Cannot put $roomNumber under maintenance");
+    }
   }
 
-  void clearMaintenance(){
+  void clearMaintenance() {
+    if(isUnderMaintenance == false) {
+     print ("Room $roomNumber Already under maintenance");
+     return;
+    }
     isUnderMaintenance = false;
     print('Room $roomNumber maintenance cleared.');
   }
@@ -55,11 +65,11 @@ abstract class Room{
   Map<String, dynamic> toJson() {
     return {
       "roomNumber": roomNumber,
-      "type": type.name, 
-      "genderPolicy": genderPolicy.name, 
+      "type": type.name,
+      "genderPolicy": genderPolicy.name,
       "isUnderMaintenance": isUnderMaintenance,
       "lastCleaned": lastCleaned?.toIso8601String(),
-      "beds": beds.map((bed) => bed.toJson()).toList(), 
+      "beds": beds.map((bed) => bed.toJson()).toList(),
     };
   }
 }

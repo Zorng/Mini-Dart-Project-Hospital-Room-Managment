@@ -2,7 +2,7 @@ import 'package:room_management/data/data_reader.dart';
 import 'package:room_management/domain/hospital.dart';
 import 'package:room_management/domain/enums.dart';
 
-void main() async {
+Future <void> main() async {
   print('Starting Hospital System Integration Test...');
 
   // --- A. DATA LOADING ---

@@ -8,9 +8,10 @@ class Column<T> {
 
 // render rooms to table
 class Table<T> {
+  String title;
   List<T> items;
   List<Column<T>> columns;
-  Table({required this.items, required this.columns});
+  Table({required this.title, required this.items, required this.columns});
 
   //give padding to each cell
   String _padding(String data, int width) {
@@ -23,11 +24,13 @@ class Table<T> {
 
   String _headerSeparator(List<Column> cols) => '=${cols.map((c) => '=' * (c.width + 2)).join('+')}=';
 
-  String _row(List<Column<T>> cols, T item) => '| ${cols.map((c) => _padding(c.data(item) , c.width, )).join(' | ')} |';
+  String _row<T>(List<Column<T>> cols, T item) => '| ${cols.map((c) => _padding(c.data(item) , c.width, )).join(' | ')} |';
 
   String _rowSeparator(List<Column> cols) => '+${cols.map((c) => '-' * (c.width + 2)).join('+')}+';
 
   void printTable(int start, int end) {
+    print("\n");
+    print(title);
     print(_headerSeparator(columns));
     print(_header(columns));
     print(_headerSeparator(columns));

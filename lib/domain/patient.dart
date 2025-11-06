@@ -24,6 +24,12 @@ class Patient extends People{
     };
   }
 
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "$id, $name, $phone, $dob, $gender";
+  }
+
   static Patient fromJson(Map<String, dynamic> json) {
     final String? genderString = json["gender"] as String?;
     if (genderString == null) {
