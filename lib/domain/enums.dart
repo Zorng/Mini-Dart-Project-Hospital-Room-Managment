@@ -30,3 +30,11 @@ enum BedAvailability {
   @override
   String toString() => name;  
 }
+
+enum PatientStatus{
+  notAssigned,
+  assigned,
+  discharged;
+  @override
+  String toString() => name;
+}

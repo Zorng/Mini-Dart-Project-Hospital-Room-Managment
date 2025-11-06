@@ -108,6 +108,8 @@ class Hospital {
     );
     final newStay = room.admitPatient(patient);
     stays.add(newStay);
+
+    patient.markAssigned();
   }
 
   void dischargePatient({required String patientId}) {
@@ -137,6 +139,7 @@ class Hospital {
 
     stay.recordDischarge(); // trigger discharge on PatientStay
     bed.dischargePatient(); // trigger discharge on Bed
+    patient.markDischarged(); // update patient status
 
     // Find the room the bed belongs to for status check
     final room = rooms.firstWhere(
