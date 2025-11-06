@@ -5,25 +5,25 @@
         {
           "roomNumber": "A001",
           "type": "shared",
-          "gender": "maleOnly",
+          "genderPolicy": "maleOnly",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
             {
               "bedId": "A00101",
-              "status": "available",
+              "status": "needCleaning",
               "lastClean": "2025-11-04T08:30:00.000",
               "lastAssigned": "2025-11-03T21:45:00.000"
             },
             {
               "bedId": "A00102",
-              "status": "available",
+              "status": "occupied",
               "lastClean": "2025-11-03T06:00:00.000",
               "lastAssigned": "2025-11-03T08:10:00.000"
             },
             {
               "bedId": "A00103",
-              "status": "available",
+              "status": "occupied",
               "lastClean": "2025-11-03T07:45:00.000",
               "lastAssigned": "2025-11-03T09:00:00.000"
             },
@@ -38,7 +38,7 @@
         {
           "roomNumber": "A002",
           "type": "shared",
-          "gender": "maleOnly",
+          "genderPolicy": "maleOnly",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -71,7 +71,7 @@
         {
           "roomNumber": "A003",
           "type": "shared",
-          "gender": "femaleOnly",
+          "genderPolicy": "femaleOnly",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -104,7 +104,7 @@
         {
           "roomNumber": "A004",
           "type": "shared",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -137,7 +137,7 @@
         {
           "roomNumber": "B001",
           "type": "semiPrivate",
-          "gender": "femaleOnly",
+          "genderPolicy": "femaleOnly",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -158,7 +158,7 @@
         {
           "roomNumber": "B002",
           "type": "private",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -173,7 +173,7 @@
         {
           "roomNumber": "B003",
           "type": "semiPrivate",
-          "gender": "femaleOnly",
+          "genderPolicy": "femaleOnly",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -194,7 +194,7 @@
         {
           "roomNumber": "B004",
           "type": "private",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -209,7 +209,7 @@
         {
           "roomNumber": "B005",
           "type": "vip",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -228,7 +228,7 @@
         {
           "roomNumber": "1L101",
           "type": "private",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -246,7 +246,7 @@
         {
           "roomNumber": "2L201",
           "type": "private",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -264,7 +264,7 @@
         {
           "roomNumber": "3L301",
           "type": "private",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -282,7 +282,7 @@
         {
           "roomNumber": "1V101",
           "type": "vip",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -300,7 +300,7 @@
         {
           "roomNumber": "2V201",
           "type": "vip",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -318,7 +318,7 @@
         {
           "roomNumber": "3V301",
           "type": "vip",
-          "gender": "mixed",
+          "genderPolicy": "mixed",
           "isUnderMaintenance": false,
           "lastCleaned": null,
           "beds": [
@@ -445,193 +445,11 @@
   ],
   "stays": [
     {
-      "stayId": "S001",
-      "patientId": "P001",
-      "bedId": "A00102",
-      "admitDate": "2025-11-03T08:10:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S002",
-      "patientId": "P002",
-      "bedId": "A00103",
-      "admitDate": "2025-11-03T09:00:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S003",
-      "patientId": "P003",
-      "bedId": "A00202",
-      "admitDate": "2025-11-03T07:00:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S004",
-      "patientId": "P004",
-      "bedId": "A00203",
-      "admitDate": "2025-11-03T07:45:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S005",
-      "patientId": "P005",
-      "bedId": "A00301",
-      "admitDate": "2025-11-03T09:20:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S006",
-      "patientId": "P006",
-      "bedId": "A00302",
-      "admitDate": "2025-11-03T09:40:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S007",
-      "patientId": "P007",
-      "bedId": "A00401",
-      "admitDate": "2025-11-03T08:20:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S008",
-      "patientId": "P008",
-      "bedId": "A00404",
-      "admitDate": "2025-11-03T08:40:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S009",
-      "patientId": "P009",
-      "bedId": "A00502",
-      "admitDate": "2025-11-03T08:00:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S010",
-      "patientId": "P010",
-      "bedId": "A00504",
-      "admitDate": "2025-11-03T09:10:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S011",
-      "patientId": "P011",
-      "bedId": "A00601",
-      "admitDate": "2025-11-03T08:35:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S012",
-      "patientId": "P012",
-      "bedId": "A00602",
-      "admitDate": "2025-11-03T09:00:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S013",
-      "patientId": "P013",
-      "bedId": "A00703",
-      "admitDate": "2025-11-03T08:45:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S014",
-      "patientId": "P014",
-      "bedId": "A00704",
-      "admitDate": "2025-11-03T09:15:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S015",
-      "patientId": "P015",
-      "bedId": "A00801",
-      "admitDate": "2025-11-03T07:50:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S016",
-      "patientId": "P001",
-      "bedId": "A00804",
-      "admitDate": "2025-11-03T08:05:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S017",
-      "patientId": "P002",
-      "bedId": "B00101",
-      "admitDate": "2025-11-03T08:30:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S018",
-      "patientId": "P003",
-      "bedId": "B00202",
-      "admitDate": "2025-11-03T09:05:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S019",
-      "patientId": "P004",
-      "bedId": "B00401",
-      "admitDate": "2025-11-03T08:20:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S020",
-      "patientId": "P005",
-      "bedId": "B00502",
-      "admitDate": "2025-11-03T08:15:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S021",
-      "patientId": "P006",
-      "bedId": "1L101",
-      "admitDate": "2025-11-03T08:20:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S022",
-      "patientId": "P007",
-      "bedId": "2L201",
-      "admitDate": "2025-11-03T07:45:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S023",
-      "patientId": "P008",
-      "bedId": "2V201",
-      "admitDate": "2025-11-03T07:55:00.000",
-      "dischargeDate": null
-    },
-    {
-      "stayId": "S024",
+      "stayId": "S-1762400794286",
       "patientId": "P009",
       "bedId": "A00101",
-      "admitDate": "2025-11-03T14:00:00.000",
-      "dischargeDate": "2025-11-04T07:50:00.000"
-    },
-    {
-      "stayId": "S025",
-      "patientId": "P010",
-      "bedId": "A00201",
-      "admitDate": "2025-11-03T13:10:00.000",
-      "dischargeDate": "2025-11-04T06:30:00.000"
-    },
-    {
-      "stayId": "S026",
-      "patientId": "P011",
-      "bedId": "3L301",
-      "admitDate": "2025-11-03T10:10:00.000",
-      "dischargeDate": "2025-11-04T08:40:00.000"
-    },
-    {
-      "stayId": "S-1762358051546",
-      "patientId": "P009",
-      "bedId": "A00101",
-      "admitDate": "2025-11-05T22:54:11.546911",
-      "dischargeDate": "2025-11-05T22:54:11.549902"
+      "admitDate": "2025-11-06T10:46:34.287091",
+      "dischargeDate": "2025-11-06T10:46:34.287763"
     }
   ],
   "users": [

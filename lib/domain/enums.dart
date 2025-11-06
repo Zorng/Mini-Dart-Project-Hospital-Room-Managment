@@ -1,23 +1,32 @@
 enum GenderPolicy {
   maleOnly,
   femaleOnly,
-  mixed,
+  mixed;
+
+  @override
+  String toString() => name;
 }
 
 enum Gender{
   male,
-  female
+  female;
+  @override
+  String toString() => name;
 }
 
 enum Level {
   lv1, 
   lv2,
-  lv3,
+  lv3;
+  @override
+  String toString() => name;
 }
 
 enum BedAvailability {
   available,      
   occupied,       
   maintenance,    
-  needCleaning,   
+  needCleaning;
+  @override
+  String toString() => name;  
 }

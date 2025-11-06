@@ -13,10 +13,7 @@ class User extends People{
     required this.passwordHash,
   }) : super(id: id, name: name, phone: phone);
 
-  bool logIn({required String phone, required String password}){
-    print('Attempting login for User $name via phone $phone...');
-    return false;
-  }
+  
 
   void createRoom() => throw UnimplementedError('createRoom() is not implemented.');
   void readRoom() => throw UnimplementedError('readRoom() is not implemented.');
@@ -40,6 +37,12 @@ class User extends People{
       "gender": gender.name,
       "passwordHash": passwordHash,
     };
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "$id, $name, $gender, $phone, $passwordHash";
   }
 
   static User fromJson(Map<String, dynamic> json) {

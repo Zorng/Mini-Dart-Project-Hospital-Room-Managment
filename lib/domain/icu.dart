@@ -8,7 +8,7 @@ import 'patient_stay.dart';
 class ICU extends Room {
   final bool hasVentilator;
   final bool hasCardiacMonitor;
-  final Level acuityLevel;
+  final Level level;
 
   ICU({
     required String roomNumber,
@@ -17,7 +17,7 @@ class ICU extends Room {
     required GenderPolicy genderPolicy,
     required this.hasVentilator,
     required this.hasCardiacMonitor,
-    required this.acuityLevel,
+    required this.level,
     DateTime? lastCleaned,
     bool isUnderMaintenance = false,
   }) : super(
@@ -88,7 +88,7 @@ class ICU extends Room {
       assignedDate: DateTime.now(),
       roomRateSnapshot: type,
       roomNumberSnapshot: roomNumber,
-      acuitySnapshot: acuityLevel,
+      acuitySnapshot: level,
     );
 
     newStay.currentPatient = patient;
@@ -108,7 +108,7 @@ class ICU extends Room {
       ...super.toJson(),
       "hasVentilator": hasVentilator,
       "hasCardiacMonitor": hasCardiacMonitor,
-      "acuityLevelName": acuityLevel.name,
+      "level": level.name,
     };
   }
 
@@ -169,7 +169,7 @@ class ICU extends Room {
       genderPolicy: policy,
       hasVentilator: hasVentilator,
       hasCardiacMonitor: hasCardiacMonitor,
-      acuityLevel: level,
+      level: level,
       lastCleaned: parseDate(json["lastCleaned"] as String?),
       isUnderMaintenance: json["isUnderMaintenance"] as bool? ?? false,
     );

@@ -23,16 +23,14 @@ class Paginator {
       // print("Press e to select actions");
       // print("Press q to return");
 
-      print("\nPage naviagtion: [a] for previous page, [d] for next page and [q] to return");
-      print("Action selections: [e]");
-
+      print("\nPage naviagtion:\n[a]. previous page\n[d]. next page\n[e]. perform actions\n[q]. return");
       stdout.write("\nEnter an option: ");
 
       input = stdin.readLineSync();
       
-      if (input == 'a' && page < totalPage.floor()) {
+      if (input == 'd' && page < totalPage.floor()) {
         page++;
-      } else if (input == 'd' && page > 1) {
+      } else if (input == 'a' && page > 1) {
         page--;
       } else if (input == 'q') {
         AppConsole.clearConsole();

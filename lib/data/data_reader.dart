@@ -25,10 +25,14 @@ class DataReader {
       final List<Patient> patients = (data['patients'] as List? ?? [])
           .map((jsonMap) => Patient.fromJson(jsonMap))
           .toList();
+      
+      // patients.forEach(print);
 
       final List<User> users = (data['users'] as List? ?? [])
           .map((jsonMap) => User.fromJson(jsonMap))
           .toList();
+
+      // users.forEach(print);
 
       final List<PatientStay> stays = (data['patientStay'] as List? ?? [])
           .map((jsonMap) => PatientStay.fromJson(jsonMap))
@@ -74,16 +78,25 @@ class DataReader {
   }
 
   static Future<void> writeData(Hospital hospital) async{
+    final wards = hospital.rooms.whereType<Ward>().cast<Ward>().toList();
+    final icus = hospital.rooms.whereType<ICU>().cast<ICU>().toList();
     try{
       final Map<String, dynamic> data = {
-        'rooms': hospital.rooms.map((room) => room.toJson()).toList(),
+        'rooms': [
+          {
+            'wards': wards.map((w) => w.toJson()).toList()
+          },
+          {
+            'icus': icus.map((i) => i.toJson()).toList()
+          }
+        ],
         'patients': hospital.patients.map((patient) => patient.toJson()).toList(),
         'stays': hospital.stays.map((stay) => stay.toJson()).toList(),
         'users': hospital.users.map((user) => user.toJson()).toList(),
       };
 
       final jsonString = JsonEncoder.withIndent('  ').convert(data);
-      final file = File(_dataFile);
+      final file = File('lib/data/output.json');
 
       await file.writeAsString(jsonString);
       print('Data successfully written to $_dataFile');
@@ -93,3 +106,4 @@ class DataReader {
     }
   }
 }
+
