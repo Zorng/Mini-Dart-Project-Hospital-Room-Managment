@@ -324,7 +324,7 @@ class AppConsole {
   }
 
   void enlistPatient() {
-    String id, name, phone, dateStr;
+    String id, name, phone;
     DateTime? dob;
     Gender gender;
     String? value;

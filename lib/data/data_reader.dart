@@ -7,9 +7,6 @@ import 'package:room_management/domain/room.dart';
 import 'package:room_management/domain/ward.dart';
 import 'package:room_management/domain/icu.dart';
 import 'package:room_management/domain/user.dart';
-void main() async {
-  Hospital hospital = await DataReader.readData();
-}
 
 class DataReader {
   static const String _dataFile = 'lib/data/hospital_data.json';
